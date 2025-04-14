@@ -13,7 +13,7 @@ class UserController extends Controller
     // Show user profile
     public function show(Request $request)
     {
-        $user = $request->user();
+        $user = $request->user()->load('reviews');
 
         return new UserResource($user);
     }
@@ -43,7 +43,9 @@ class UserController extends Controller
     public function index()
     {
         $this->authorizeAdmin();
-        return UserResource::collection(User::paginate(10));
+        $users = User::with(['reviews', 'comments'])->paginate(10);
+
+        return UserResource::collection($users);
     }
 
     // Delete  user as admin

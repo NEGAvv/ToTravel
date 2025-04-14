@@ -21,7 +21,32 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'bio' => $this->bio,
             'location' => $this->location,
-            'interests' => json_decode($this->interests),
+            'interests' => $this->interests,
+
+
+            'reviews' => $this->whenLoaded('reviews', fn() => $this->reviews->map(function ($review) {
+                return [
+                    'id' => $review->id,
+                    'place_id' => $review->place_id,
+                    'rating' => $review->rating,
+                    'review_text' => $review->review_text,
+                    'created_at' => $review->created_at,
+                ];
+            })),
+
+            // comments — тільки якщо запит робить адмін
+            'comments' => $this->when(
+                $request->user()?->role === 'ADMIN' && $this->relationLoaded('comments'),
+                fn() => $this->comments->map(function ($comment) {
+                    return [
+                        'id' => $comment->id,
+                        'review_id' => $comment->review_id,
+                        'comment_text' => $comment->comment_text,
+                        'created_at' => $comment->created_at,
+                    ];
+                })
+            ),
+
             'created_at' => $this->created_at,
         ];
     }

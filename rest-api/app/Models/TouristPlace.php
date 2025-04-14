@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TouristPlace extends Model
+{
+    /** @use HasFactory<\Database\Factories\TouristPlaceFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'name', 
+        'location', 
+        'description', 
+        'rating'
+    ];
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'place_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'place_id');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_tourist_place', 'place_id', 'category_id');
+    }
+}
