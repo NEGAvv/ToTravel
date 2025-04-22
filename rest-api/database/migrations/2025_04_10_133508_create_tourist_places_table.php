@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7)->nullable();
             $table->float('rating')->nullable();
             $table->string('category')->nullable();
+            $table->index('category');
             $table->timestamps();
         });
     }
