@@ -19,6 +19,9 @@ Route::get('/', function () {
     return "API is Working";
 });
 
+Route::get('/places/search', [TouristPlaceController::class, 'search']);
+
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 

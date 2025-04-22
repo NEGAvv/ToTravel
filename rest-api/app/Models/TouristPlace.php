@@ -11,10 +11,15 @@ class TouristPlace extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 
-        'location', 
-        'description', 
-        'rating'
+        'location_id',
+        'name',
+        'description',
+        'country',
+        'address_string',
+        'latitude',
+        'longitude',
+        'rating',
+        'category',
     ];
 
     public function reviews()

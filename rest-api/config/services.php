@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'tripadvisor' => [
+        'key' => env('TRIPADVISOR_API_KEY'),
+        'base_url' => 'https://api.content.tripadvisor.com/api/v1',
+    ],
+
 ];

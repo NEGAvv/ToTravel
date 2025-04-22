@@ -1,0 +1,64 @@
+<?php
+namespace App\Services;
+
+use App\Models\TouristPlace;
+use Illuminate\Support\Facades\Http;
+
+class TripAdvisorService
+{
+    public function searchAndStorePlace(string $query): array
+    {
+        // 1. Перевіряємо, чи вже є місце в базі
+        $existing = TouristPlace::where('name', 'LIKE', "%$query%")->first();
+        if ($existing) {
+            return ['from_db' => true, 'place' => $existing];
+        }
+
+        // 2. Шукаємо місце через TripAdvisor API
+        $response = Http::get(config('services.tripadvisor.base_url') . '/search', [
+            'key' => config('services.tripadvisor.key'),
+            'searchQuery' => $query,
+            'language' => 'en',
+        ]);
+
+        $results = $response->json()['data'] ?? [];
+
+        if (empty($results)) {
+            return ['error' => 'No results found'];
+        }
+
+        $storedPlaces = [];
+
+        // 3. Беремо до 5 результатів, отримуємо деталі, зберігаємо
+        foreach (array_slice($results, 0, 5) as $result) {
+            $locationId = $result['location_id'];
+
+            // Перевірка дубля
+            if (TouristPlace::where('location_id', $locationId)->exists()) {
+                continue;
+            }
+
+            $details = Http::get(config('services.tripadvisor.base_url') . "/{$locationId}/details", [
+                'key' => config('services.tripadvisor.key'),
+                'language' => 'en',
+                'currency' => 'USD',
+            ])->json();
+
+            $place = TouristPlace::create([
+                'location_id' => $details['location_id'],
+                'name' => $details['name'] ?? '',
+                'description' => $details['description'] ?? null,
+                'country' => $details['address_obj']['country'] ?? null,
+                'address_string' => $details['address_obj']['address_string'] ?? null,
+                'latitude' => $details['latitude'] ?? null,
+                'longitude' => $details['longitude'] ?? null,
+                'rating' => $details['rating'] ?? null,
+                'category' => $details['category']['name'] ?? null,
+            ]);
+
+            $storedPlaces[] = $place;
+        }
+
+        return ['from_db' => false, 'places' => $storedPlaces];
+    }
+}

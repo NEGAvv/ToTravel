@@ -41,45 +41,46 @@ class DatabaseSeeder extends Seeder
 
         // Категорії і туристичні місця
         Category::factory(5)->create();
-        TouristPlace::factory(10)->create()->each(function ($place) {
-            $categories = Category::inRandomOrder()->take(rand(1, 3))->pluck('id');
-            $place->categories()->attach($categories);
-        });
+        
+        // TouristPlace::factory(10)->create()->each(function ($place) {
+        //     $categories = Category::inRandomOrder()->take(rand(1, 3))->pluck('id');
+        //     $place->categories()->attach($categories);
+        // });
 
-        // Завантаження існуючих записів
-        $users = User::all();
-        $places = TouristPlace::all();
+        // // Завантаження існуючих записів
+        // $users = User::all();
+        // $places = TouristPlace::all();
 
-        if ($users->count() && $places->count()) {
-            Review::factory(20)->make()->each(function ($review) use ($users, $places) {
-                $review->user_id = $users->random()->id;
-                $review->place_id = $places->random()->id;
-                $review->save();
-            });
-        }
+        // if ($users->count() && $places->count()) {
+        //     Review::factory(20)->make()->each(function ($review) use ($users, $places) {
+        //         $review->user_id = $users->random()->id;
+        //         $review->place_id = $places->random()->id;
+        //         $review->save();
+        //     });
+        // }
 
-        $reviews = Review::all();
+        // $reviews = Review::all();
 
-        if ($users->count() && $reviews->count()) {
-            Comment::factory(30)->make()->each(function ($comment) use ($users, $reviews) {
-                $comment->user_id = $users->random()->id;
-                $comment->review_id = $reviews->random()->id;
-                $comment->save();
-            });
+        // if ($users->count() && $reviews->count()) {
+        //     Comment::factory(30)->make()->each(function ($comment) use ($users, $reviews) {
+        //         $comment->user_id = $users->random()->id;
+        //         $comment->review_id = $reviews->random()->id;
+        //         $comment->save();
+        //     });
 
-            Like::factory(40)->make()->each(function ($like) use ($users, $places, $reviews) {
-                $like->user_id = $users->random()->id;
+        //     Like::factory(40)->make()->each(function ($like) use ($users, $places, $reviews) {
+        //         $like->user_id = $users->random()->id;
 
-                if ($places->count() && rand(0, 1)) {
-                    $like->place_id = $places->random()->id;
-                    $like->review_id = null;
-                } elseif ($reviews->count()) {
-                    $like->place_id = null;
-                    $like->review_id = $reviews->random()->id;
-                }
+        //         if ($places->count() && rand(0, 1)) {
+        //             $like->place_id = $places->random()->id;
+        //             $like->review_id = null;
+        //         } elseif ($reviews->count()) {
+        //             $like->place_id = null;
+        //             $like->review_id = $reviews->random()->id;
+        //         }
 
-                $like->save();
-            });
-        }
+        //         $like->save();
+        //     });
+        // }
     }
 }
