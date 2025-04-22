@@ -72,15 +72,14 @@ class TouristPlaceController extends Controller
             'category_ids.*' => 'exists:categories,id',
         ]);
 
-        // Оновлюємо основні дані
+        // Update main data
         $touristPlace->update($validated);
 
-        // Якщо є category_ids, синхронізуємо категорії
+        // Sync categories 
         if (isset($validated['category_ids'])) {
             $touristPlace->categories()->sync($validated['category_ids']);
         }
 
-        // Завантажуємо оновлені дані місця з категоріями та відгуками
         return response()->json($touristPlace->load(['categories', 'reviews']));
     }
 
@@ -97,10 +96,4 @@ class TouristPlaceController extends Controller
         return response()->json(['message' => 'Place deleted']);
     }
 
-    // private function authorizeAdmin()
-    // {
-    //     if (auth()->user()->role !== 'ADMIN') {
-    //         abort(403, 'Access denied');
-    //     }
-    // }
 }

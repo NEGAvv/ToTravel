@@ -34,7 +34,7 @@ class UserResource extends JsonResource
                 ];
             })),
 
-            // comments — тільки якщо запит робить адмін
+            // comments — if admin 
             'comments' => $this->when(
                 $request->user()?->role === 'ADMIN' && $this->relationLoaded('comments'),
                 fn() => $this->comments->map(function ($comment) {

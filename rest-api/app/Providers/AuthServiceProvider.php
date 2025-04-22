@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
-     /**
+    /**
      * The policy mappings for the application.
      *
      * @var array<class-string, class-string>
@@ -20,9 +20,5 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Bootstrap any authentication / authorization services.
      */
-    public function boot(): void
-    {
-
-        // Можна додатково реєструвати Gate, якщо потрібно
-    }
+    public function boot(): void {}
 }
