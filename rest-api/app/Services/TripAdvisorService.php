@@ -91,8 +91,12 @@ class TripAdvisorService
                 $details = $this->fetchPlaceDetails($locationId);
                 if (!$details || !isset($details['name'])) continue;
 
+
                 $placeData = $this->mapDetailsToPlaceData($details);
-                $saved[] = TouristPlace::create($placeData);
+                $touristPlace = TouristPlace::create($placeData);
+                $saved[] = $touristPlace;
+
+                $this->savePhotosForPlace($touristPlace, $locationId);
             } catch (\Exception $e) {
                 continue;
             }
@@ -118,6 +122,45 @@ class TripAdvisorService
 
         return $response->failed() ? null : $response->json();
     }
+
+    private function fetchPhotos(string $locationId): array
+    {
+        $key = config('services.tripadvisor.key');
+        $baseUrl = rtrim(config('services.tripadvisor.base_url'), '/');
+        $url = "$baseUrl/location/$locationId/photos";
+
+        $response = Http::retry(3, 1000)
+            ->withHeaders(['accept' => 'application/json'])
+            ->timeout(30)
+            ->get($url, [
+                'key' => $key,
+                'language' => 'en',
+                'limit' => 3,
+            ]);
+
+        if ($response->failed()) return [];
+
+        return $response->json()['data'] ?? [];
+    }
+
+    private function savePhotosForPlace(TouristPlace $place, string $locationId): void
+    {
+        $photos = $this->fetchPhotos($locationId);
+
+        foreach ($photos as $photo) {
+            $place->photos()->create([
+                'caption' => $photo['caption'] ?? null,
+                'source' => $photo['source']['name'] ?? null,
+                'user' => $photo['user']['username'] ?? null,
+                'thumbnail_url' => $photo['images']['thumbnail']['url'] ?? null,
+                'small_url' => $photo['images']['small']['url'] ?? null,
+                'medium_url' => $photo['images']['medium']['url'] ?? null,
+                'large_url' => $photo['images']['large']['url'] ?? null,
+                'original_url' => $photo['images']['original']['url'] ?? null,
+            ]);
+        }
+    }
+
 
     private function mapDetailsToPlaceData(array $details): array
     {

@@ -36,4 +36,9 @@ class TouristPlace extends Model
     {
         return $this->belongsToMany(Category::class, 'category_tourist_place', 'place_id', 'category_id');
     }
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }
