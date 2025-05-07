@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PlaceController;
@@ -45,6 +46,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('reviews', ReviewController::class)->only(['index', 'show']);
 
+    // Routes for likes
+
+    Route::post('/likes', [LikeController::class, 'store']);
+    Route::delete('/likes', [LikeController::class, 'destroy']);
+
+    Route::get('/savedPlaces', [LikeController::class, 'savedPlaces']);
 
     Route::get('/profile', [UserController::class, 'show']);
     Route::put('/profile', [UserController::class, 'update']);

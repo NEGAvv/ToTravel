@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         // Категорії і туристичні місця
-        Category::factory(5)->create();
+       // Category::factory(5)->create();
         
         // TouristPlace::factory(10)->create()->each(function ($place) {
         //     $categories = Category::inRandomOrder()->take(rand(1, 3))->pluck('id');

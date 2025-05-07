@@ -17,7 +17,11 @@ return new class extends Migration
             $table->foreignId('review_id')->nullable()->constrained('reviews')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
+        
+            $table->unique(['user_id', 'place_id']);
+            $table->unique(['user_id', 'review_id']);
         });
+        
     }
 
     /**

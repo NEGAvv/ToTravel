@@ -41,4 +41,6 @@ class TouristPlace extends Model
     {
         return $this->hasMany(Photo::class);
     }
+
+   
 }
