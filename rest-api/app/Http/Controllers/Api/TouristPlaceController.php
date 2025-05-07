@@ -35,16 +35,19 @@ class TouristPlaceController extends Controller
      */
     public function index()
     {
-        return TouristPlace::with(['categories', 'reviews'])->get();
+        return TouristPlace::with(['categories', 'reviews', 'photos'])->get();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($locationId)
     {
-        return TouristPlace::with(['categories', 'reviews'])->findOrFail($id);
+        return TouristPlace::with(['categories', 'reviews', 'photos'])
+            ->where('location_id', $locationId)
+            ->firstOrFail();
     }
+
 
 
     /**
@@ -55,13 +58,18 @@ class TouristPlaceController extends Controller
         $this->authorize('create', TouristPlace::class);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'rating' => 'nullable|numeric|min:0|max:5',
-            'category_ids' => 'nullable|array',
-            'category_ids.*' => 'exists:categories,id',
+            'location_id'     => 'required|integer|exists:locations,id',
+            'name'            => 'required|string|max:255',
+            'description'     => 'nullable|string',
+            'country'         => 'required|string|max:100',
+            'address_string'  => 'nullable|string|max:255',
+            'latitude'        => 'nullable|numeric|between:-90,90',
+            'longitude'       => 'nullable|numeric|between:-180,180',
+            'rating'          => 'nullable|numeric|min:0|max:5',
+            'category_ids'    => 'nullable|array',
+            'category_ids.*'  => 'exists:categories,id',
         ]);
+
 
         $place = TouristPlace::create($validated);
 
@@ -69,7 +77,7 @@ class TouristPlaceController extends Controller
             $place->categories()->sync($validated['category_ids']);
         }
 
-        return response()->json($place->load(['categories', 'reviews']), 201);
+        return response()->json($place->load(['categories', 'reviews', 'photos']), 201);
     }
 
 
@@ -82,13 +90,18 @@ class TouristPlaceController extends Controller
         $this->authorize('update', $touristPlace);
 
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'location' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'rating' => 'nullable|numeric|min:0|max:5',
-            'category_ids' => 'nullable|array',
-            'category_ids.*' => 'exists:categories,id',
+            'location_id'     => 'sometimes|required|integer|exists:locations,id',
+            'name'            => 'sometimes|required|string|max:255',
+            'description'     => 'nullable|string',
+            'country'         => 'sometimes|required|string|max:100',
+            'address_string'  => 'nullable|string|max:255',
+            'latitude'        => 'nullable|numeric|between:-90,90',
+            'longitude'       => 'nullable|numeric|between:-180,180',
+            'rating'          => 'nullable|numeric|min:0|max:5',
+            'category_ids'    => 'nullable|array',
+            'category_ids.*'  => 'exists:categories,id',
         ]);
+
 
         // Update main data
         $touristPlace->update($validated);
@@ -106,7 +119,7 @@ class TouristPlaceController extends Controller
      */
     public function destroy(TouristPlace $touristPlace)
     {
-        $this->authorize('delete', TouristPlace::class);
+        $this->authorize('delete', $touristPlace);
 
         $touristPlace->categories()->detach();
         $touristPlace->delete();

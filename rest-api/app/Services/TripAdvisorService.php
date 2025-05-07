@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\TouristPlace;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
@@ -95,6 +96,16 @@ class TripAdvisorService
                 $placeData = $this->mapDetailsToPlaceData($details);
                 $touristPlace = TouristPlace::create($placeData);
                 $saved[] = $touristPlace;
+
+                $categoryName = $details['category']['name'] ?? $details['category']['localized_name'] ?? null;
+
+                if ($categoryName) {
+                    $category = Category::firstOrCreate([
+                        'name' => $categoryName,
+                    ]);
+        
+                    $touristPlace->categories()->syncWithoutDetaching([$category->id]);
+                }
 
                 $this->savePhotosForPlace($touristPlace, $locationId);
             } catch (\Exception $e) {
