@@ -35,7 +35,9 @@ class TouristPlaceController extends Controller
      */
     public function index()
     {
-        return TouristPlace::with(['categories', 'reviews', 'photos'])->get();
+        return TouristPlace::with(['categories', 'reviews', 'photos'])
+            ->withCount('likes')
+            ->get();
     }
 
     /**
@@ -44,6 +46,7 @@ class TouristPlaceController extends Controller
     public function show($locationId)
     {
         return TouristPlace::with(['categories', 'reviews', 'photos'])
+            ->withCount('likes')
             ->where('location_id', $locationId)
             ->firstOrFail();
     }
