@@ -4,47 +4,67 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Review;
 use App\Http\Controllers\Controller;
+use App\Models\TouristPlace;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReviewController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TouristPlace $touristPlace)
     {
-        return Review::with(['user', 'place'])->get();
+        return $touristPlace->reviews()->with('user', 'comments.user')->latest()->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request, TouristPlace $touristPlace)
     {
-        //
+        $validated = $request->validate([
+            'rating' => 'required|numeric|min:1|max:5',
+            'review_text' => 'nullable|string|max:1000',
+        ]);
+
+        $review = Review::create([
+            'place_id' => $touristPlace->id,
+            'user_id' => auth()->id(),
+            'rating' => $validated['rating'],
+            'review_text' => $validated['review_text'],
+        ]);
+
+        return response()->json($review->load('user'), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        return Review::with(['user', 'place'])->findOrFail($id);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Review $review)
     {
-        //
+        $this->authorize('update', $review);
+
+        $validated = $request->validate([
+            'rating' => 'required|numeric|min:1|max:5',
+            'review_text' => 'nullable|string|max:1000',
+        ]);
+
+        $review->update($validated);
+
+        return response()->json($review->refresh());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Review $review)
     {
-        //
+        $this->authorize('delete', $review);
+
+        $place = $review->place;
+        $review->delete();
+        //$this->updatePlaceRating($place);
+
+        return response()->json(['message' => 'Review deleted']);
+    }
+
+    protected function updatePlaceRating(TouristPlace $place)
+    {
+        $average = $place->reviews()->avg('rating');
+        $place->update(['rating' => $average]);
     }
 }

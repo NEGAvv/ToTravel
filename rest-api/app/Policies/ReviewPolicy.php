@@ -35,17 +35,17 @@ class ReviewPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Review $review): bool
+    public function update(User $user, Review $review)
     {
-        return false;
+        return $user->isAdmin() || $user->id === $review->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Review $review): bool
+    public function delete(User $user, Review $review)
     {
-        return false;
+        return $user->isAdmin() || $user->id === $review->user_id;
     }
 
     /**

@@ -42,5 +42,11 @@ class TouristPlace extends Model
         return $this->hasMany(Photo::class);
     }
 
-   
+    
+    public function updateRating()
+    {
+        $averageRating = $this->reviews()->avg('rating');
+        $this->rating = round($averageRating, 1);
+        $this->save();
+    }
 }

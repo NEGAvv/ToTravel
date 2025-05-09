@@ -11,8 +11,8 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'place_id', 
-        'user_id', 
+        'place_id',
+        'user_id',
         'rating',
         'review_text'
     ];
@@ -35,5 +35,20 @@ class Review extends Model
     public function likes()
     {
         return $this->hasMany(Like::class, 'review_id');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($review) {
+            $review->place->updateRating();
+        });
+
+        static::updated(function ($review) {
+            $review->place->updateRating();
+        });
+
+        static::deleted(function ($review) {
+            $review->place->updateRating();
+        });
     }
 }
