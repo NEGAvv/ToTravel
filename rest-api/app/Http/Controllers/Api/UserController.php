@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -29,18 +30,33 @@ class UserController extends Controller
             'location' => 'nullable|string|max:255',
             'interests' => 'nullable|array',
             'interests.*' => 'string',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // $user->update([
-        //     ...$dataToUpdate,
-        //     'interests' => isset($dataToUpdate['interests']) ? json_encode($dataToUpdate['interests']) : $user->interests,
-        // ]);
-        $user->update([
-            ...$dataToUpdate
-        ]);
+        try {
+            if ($request->hasFile('avatar')) {
+                if ($user->avatar) {
+                    Storage::delete('public/avatars/' . $user->avatar);
+                }
 
+                $avatarName = $user->id . '_' . time() . '.' . $request->avatar->extension();
+                $avatarPath = $request->file('avatar')->storeAs(
+                    'avatars',
+                    $avatarName,
+                    'public'
+                );
+                $dataToUpdate['avatar'] = $avatarName;
+            }
 
-        return new UserResource($user);
+            $user->update($dataToUpdate);
+
+            return new UserResource($user);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Avatar upload failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroyOwnProfile(Request $request)
@@ -76,14 +92,8 @@ class UserController extends Controller
             'role' => ['sometimes', Rule::in(['USER', 'ADMIN'])], // allow to change the role
         ]);
 
-        // $user->update([
-        //     ...$dataToUpdate,
-        //     'interests' => isset($dataToUpdate['interests']) ? json_encode($dataToUpdate['interests']) : $user->interests,
-        // ]);
 
-        $user->update([
-            ...$dataToUpdate
-        ]);
+        $user->update($dataToUpdate);
 
 
         return new UserResource($user);

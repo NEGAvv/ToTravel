@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'bio' => $this->bio,
             'location' => $this->location,
             'interests' => $this->interests,
-
+            'avatar_url' => $this->avatar ? asset('storage/avatars/' . $this->avatar) : null,
 
             'reviews' => $this->whenLoaded('reviews', fn() => $this->reviews->map(function ($review) {
                 return [
