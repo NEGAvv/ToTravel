@@ -1,0 +1,84 @@
+<div class="min-h-screen" style="
+  background: linear-gradient(
+    120deg,
+    #ffe5d9 0%,
+    #ffe5d9 33.33%,
+    #fcd5ce 33.33%,
+    #fcd5ce 66.66%,
+    #fae1dd 66.66%,
+    #fae1dd 100%
+  );
+">
+
+    <div class="max-w-md mx-auto pt-20">
+        <div class="max-w-md mx-auto mt-10 bg-white p-8 rounded-xl shadow">
+            <h2 class="text-2xl font-bold text-center mb-2">Log in</h2>
+            <p class="text-center text-sm text-gray-500 mb-6">
+                Don't have an account? <a href="/register" class="text-blue-500">Register</a>
+            </p>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                <div>
+                    <label class="block text-sm mb-1">Email</label>
+                    <input formControlName="email" type="email" placeholder="user@example.com"
+                        class="w-full border border-gray-300 rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:border-transparent placeholder-gray-400 text-gray-700" />
+                    <div class="text-red-500 text-xs"
+                        *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                        Valid email is required
+                    </div>
+                    <div class="text-red-500 text-xs" *ngIf="serverErrors.email">
+                        {{ serverErrors.email[0] }}
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <label class="block text-sm mb-1">Password</label>
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="password"
+                        class="w-full border border-gray-300 rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:border-transparent placeholder-gray-400 text-gray-700" />
+                    <button type="button" (click)="togglePasswordVisibility()"
+                        class="absolute right-3 top-9 text-sm text-gray-500">
+                        {{ hidePassword ? 'Show' : 'Hide' }}
+                    </button>
+                    <div class="text-red-500 text-xs"
+                        *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                        Password must be at least 8 characters
+                    </div>
+                    <div class="text-red-500 text-xs" *ngIf="serverErrors.password">
+                        {{ serverErrors.password[0] }}
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <label class="block text-sm mb-1">Confirm Password</label>
+                    <input [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="password_confirmation"
+                        placeholder="password"
+                        class="w-full border border-gray-300 rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:border-transparent placeholder-gray-400 text-gray-700" />
+                    <button type="button" (click)="toggleConfirmPasswordVisibility()"
+                        class="absolute right-3 top-9 text-sm text-gray-500">
+                        {{ hideConfirmPassword ? 'Show' : 'Hide' }}
+                    </button>
+                    <div class="text-red-500 text-xs"
+                        *ngIf="loginForm.hasError('passwordMismatch') && loginForm.get('password_confirmation')?.touched">
+                        Passwords do not match
+                    </div>
+                </div>
+
+                <hr class="my-4 border-t-2 border-orange-500">
+
+                <div *ngIf="generalError"
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-full relative mb-4">
+                    {{ generalError }}
+                </div>
+
+                <button type="submit"
+                    class="w-full py-2 px-4 rounded-full font-bold text-sm transition-all duration-300 shadow-md whitespace-nowrap border-2"
+                    [ngClass]="{
+    'bg-white text-[#BF4408] border-[#BF4408] hover:bg-[#BF4408] hover:text-white': !loginForm.invalid,
+    'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed': loginForm.invalid
+  }" [disabled]="loginForm.invalid">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

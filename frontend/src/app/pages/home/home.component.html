@@ -1,0 +1,43 @@
+<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8 lg:py-10">
+  <div
+    class="relative h-64 sm:h-80 md:h-96 lg:h-[32rem] rounded-lg md:rounded-xl xl:rounded-2xl overflow-hidden shadow-md md:shadow-lg lg:shadow-xl">
+    <img src="hero.jpeg" alt="Travel destination" class="w-full h-full object-cover brightness-[0.85]" loading="lazy" />
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10"></div>
+
+    <div
+      class="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 lg:bottom-8 lg:left-8 lg:right-8 text-white space-y-2 sm:space-y-4 lg:space-y-6">
+      <h1
+        class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-md sm:drop-shadow-lg lg:drop-shadow-xl max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl leading-snug sm:leading-normal lg:leading-tight">
+        Plan Your Dream Trip with ToTravel
+      </h1>
+      <button
+        class="bg-[#BF4408] hover:bg-[#e04e0e] px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-4 rounded-lg sm:rounded-xl lg:rounded-2xl text-sm sm:text-base md:text-lg lg:text-xl font-semibold transition-all transform hover:scale-105  shadow-sm sm:shadow-md lg:shadow-lg"
+        aria-label="Start planning your trip">
+        Get Started <span class="hidden sm:inline">→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
+  <div class="mb-4 sm:mb-6">
+    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Discover your new favorite stay</h2>
+    <p class="text-sm sm:text-base text-gray-600">Discover a variety of travel options ranging from relaxing beach getaways to adventurous mountain expeditions.</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+    <app-tourist-place-card *ngFor="let place of touristPlaces" [place]="place"></app-tourist-place-card>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
+  <div class="mb-4 sm:mb-6">
+    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Top 10 Popular Locations</h2>
+    <p class="text-sm sm:text-base text-gray-600">If you're looking for something popular that you'll love, we've got the trip for you.</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
+    <img src="assets/location1.jpg" class="rounded shadow-sm sm:shadow-md w-full h-40 sm:h-48 md:h-56 object-cover" loading="lazy" />
+    <img src="assets/location2.jpg" class="rounded shadow-sm sm:shadow-md w-full h-40 sm:h-48 md:h-56 object-cover" loading="lazy" />
+  </div>
+</section>

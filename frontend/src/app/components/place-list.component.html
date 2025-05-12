@@ -1,8 +1,0 @@
-<h2>Туристичні місця</h2>
-    <ul>
-      <li *ngFor="let place of places">
-        <strong>{{ place.name }}</strong> ({{ place.location }})<br />
-        {{ place.description }}<br />
-        <img *ngIf="place.image_url" [src]="place.image_url" width="200" />
-      </li>
-    </ul>

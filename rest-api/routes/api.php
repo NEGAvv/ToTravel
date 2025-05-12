@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/savedPlaces', [LikeController::class, 'savedPlaces']);
 
     // User profile
+    Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/profile', [UserController::class, 'show']);
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroyOwnProfile']);

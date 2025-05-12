@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    public function getUser(Request $request)
+    {
+        $user = $request->user();
+
+        return new UserResource($user);
+    }
+
     // Show user profile
     public function show(Request $request)
     {
