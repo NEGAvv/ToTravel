@@ -21,18 +21,21 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'bio' => $this->bio,
             'location' => $this->location,
-            'interests' => $this->interests,
+            'interests' => is_array($this->interests)
+                ? $this->interests
+                : (is_string($this->interests) ? explode(',', $this->interests) : []),
             'avatar_url' => $this->avatar ? asset('storage/avatars/' . $this->avatar) : null,
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
 
-            'reviews' => $this->whenLoaded('reviews', fn() => $this->reviews->map(function ($review) {
-                return [
-                    'id' => $review->id,
-                    'place_id' => $review->place_id,
-                    'rating' => $review->rating,
-                    'review_text' => $review->review_text,
-                    'created_at' => $review->created_at,
-                ];
-            })),
+            // 'reviews' => $this->whenLoaded('reviews', fn() => $this->reviews->map(function ($review) {
+            //     return [
+            //         'id' => $review->id,
+            //         'place_id' => $review->place_id,
+            //         'rating' => $review->rating,
+            //         'review_text' => $review->review_text,
+            //         'created_at' => $review->created_at,
+            //     ];
+            // })),
 
             // comments — if admin 
             'comments' => $this->when(

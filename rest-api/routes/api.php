@@ -11,19 +11,6 @@ use App\Http\Controllers\Api\TouristPlaceController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
-//Route::apiResource('places', PlaceController::class);
-
-Route::get('/', function () {
-    return "API is Working";
-});
-
-
-
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 

@@ -31,4 +31,11 @@ export class HeaderComponent {
   onLogout() {
     this.authService.logout().subscribe(() => this.router.navigate(['/login']));
   }
+
+  isDropdownOpen = false;
+
+toggleDropdown() {
+  this.isDropdownOpen = !this.isDropdownOpen;
+}
+
 }

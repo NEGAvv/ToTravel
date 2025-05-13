@@ -1,18 +1,14 @@
 <div
   class="rounded-xl overflow-hidden transition-all duration-300 w-[300px] h-[420px] flex flex-col cursor-pointer group">
-  <!-- Фото -->
   <div class="relative h-64 overflow-hidden">
     <img [src]="imageUrl" [alt]="place.name"
       class="w-full h-full object-cover group-hover:scale-100 transition-transform duration-500" />
     <div class="absolute inset-0  group-hover:bg-white/20 transition-all duration-300"></div>
   </div>
 
-  <!-- Контент -->
   <div class="px-2 py-3 flex-1 flex flex-col">
-    <!-- Назва -->
     <h3 class="text-lg font-bold text-gray-800 truncate mb-2">{{ place.name }}</h3>
 
-    <!-- Рейтинг -->
     <div class="flex items-center mb-2" *ngIf="hasRating; else noRating">
       <div class="flex mr-2">
 
@@ -20,14 +16,12 @@
 
         <ng-container *ngFor="let star of getRatingStars(); let i = index">
           <div class="relative h-5 w-5">
-            <!-- Повна зірка (фон) -->
             <svg *ngIf="star < 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute text-gray-300 fill-current"
               viewBox="0 0 20 20">
               <path
                 d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
             </svg>
 
-            <!-- Часткова зірка -->
             <div *ngIf="star > 0 && star < 1" class="absolute overflow-hidden" [style.width.%]="star * 100">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 fill-current" viewBox="0 0 20 20">
                 <path
@@ -35,7 +29,6 @@
               </svg>
             </div>
 
-            <!-- Повна зірка -->
             <svg *ngIf="star >= 1" xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute text-amber-500 fill-current" viewBox="0 0 20 20">
               <path
@@ -53,14 +46,12 @@
       <div class="text-sm text-gray-500 mb-2">No rating yet</div>
     </ng-template>
 
-    <!-- Категорії -->
     <div class="mb-2 flex flex-wrap gap-1">
       <span *ngFor="let category of categories" class="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded-full">
         {{ category }}
       </span>
     </div>
 
-    <!-- Локація -->
     <div class="mt-auto flex items-center text-sm text-gray-600">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-amber-600" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">

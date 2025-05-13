@@ -1,0 +1,215 @@
+<!-- Skeleton loading -->
+<div *ngIf="loading"
+    class="flex flex-col md:flex-row justify-center gap-8 px-4 py-6 mt-2 max-w-6xl mx-auto animate-pulse">
+    <div class="bg-gray-100 shadow-lg rounded-lg p-6 w-full md:w-1/3 flex flex-col justify-between min-h-[500px]">
+        <div class="flex-1 w-full flex flex-col items-center">
+            <div class="w-24 h-24 rounded-full bg-gray-300 mb-4"></div>
+
+            <div class="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
+            <div class="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
+
+            <div class="w-full max-w-[300px] space-y-2 mb-4">
+                <div class="h-3 bg-gray-300 rounded w-full"></div>
+                <div class="h-3 bg-gray-300 rounded w-5/6"></div>
+                <div class="h-3 bg-gray-300 rounded w-4/6"></div>
+                <div class="h-3 bg-gray-300 rounded w-3/6"></div>
+            </div>
+
+            <div class="w-full space-y-3">
+                <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                <div>
+                    <div class="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="h-6 bg-gray-300 rounded-full w-16"></div>
+                        <div class="h-6 bg-gray-300 rounded-full w-20"></div>
+                        <div class="h-6 bg-gray-300 rounded-full w-12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full mt-6 space-y-3">
+            <div class="h-10 bg-gray-300 rounded-full w-full"></div>
+            <div class="h-10 bg-gray-300 rounded-full w-full"></div>
+        </div>
+    </div>
+
+    <div class="bg-gray-100 shadow-md rounded-xl p-6 w-full md:w-2/3">
+        <div class="h-8 bg-gray-300 rounded w-1/4 mb-6"></div>
+
+        <div class="space-y-4">
+            <div class="flex bg-gray-100 rounded-xl mb-4 h-32">
+                <div class="w-24 h-full bg-gray-300 flex-shrink-0"></div>
+                <div class="flex-grow p-4 space-y-3">
+                    <div class="flex justify-between">
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-300 rounded w-3/4"></div>
+                            <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+                        </div>
+                        <div class="h-3 bg-gray-300 rounded w-16"></div>
+                    </div>
+                    <div class="h-5 bg-gray-300 rounded w-24"></div>
+                    <div class="space-y-2">
+                        <div class="h-3 bg-gray-300 rounded w-full"></div>
+                        <div class="h-3 bg-gray-300 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex bg-gray-100 rounded-xl mb-4 h-32">
+                <div class="w-24 h-full bg-gray-300 flex-shrink-0"></div>
+                <div class="flex-grow p-4 space-y-3">
+                    <div class="flex justify-between">
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-300 rounded w-2/3"></div>
+                            <div class="h-3 bg-gray-300 rounded w-1/3"></div>
+                        </div>
+                        <div class="h-3 bg-gray-300 rounded w-16"></div>
+                    </div>
+                    <div class="h-5 bg-gray-300 rounded w-20"></div>
+                    <div class="space-y-2">
+                        <div class="h-3 bg-gray-300 rounded w-full"></div>
+                        <div class="h-3 bg-gray-300 rounded w-3/4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="error" class="text-red-500 text-center py-6">{{ error }}</div>
+
+
+
+
+<div *ngIf="user && !loading" class="flex flex-col md:flex-row justify-center gap-8 px-4 py-6 mt-2 max-w-6xl mx-auto">
+    <!-- Profile Card -->
+    <div
+        class="bg-white shadow-lg rounded-lg p-6 w-full md:w-1/3 flex flex-col justify-between items-center min-h-[500px]">
+
+        <div class="flex-1 w-full flex flex-col items-center">
+            <div class="w-24 h-24 rounded-full bg-gray-200 mb-4 overflow-hidden">
+                <img [src]="avatarUrl" alt="User avatar" class="w-full h-full object-cover" />
+            </div>
+
+            <h2 class="text-lg font-semibold text-center">{{ user.name }}</h2>
+
+            <p class="text-sm text-gray-500 mb-3">{{ user.location || '-' }}</p>
+
+            <p
+                class="text-left text-sm text-gray-700 mb-4 mx-auto max-w-[300px] line-clamp-4 break-words whitespace-normal">
+                {{ user.bio || 'Travel enthusiast and adventure seeker. Always looking for the next great experience!'
+                }}
+            </p>
+
+            <div class="w-full text-left text-sm text-gray-700 space-y-2">
+                <div>
+                    <strong class="text-gray-800">Joined:</strong> {{ formattedDate }}
+                </div>
+                <div>
+                    <strong class="text-gray-800 block mb-1">Interests:</strong>
+                    <ng-container *ngIf="user.interests?.length; else noInterests">
+                        <div class="flex flex-wrap gap-2">
+                            <span *ngFor="let interest of user.interests"
+                                class="bg-[#FFF3ED] text-[#BF4408] px-3 py-1 rounded-full text-xs font-medium">
+                                {{ interest }}
+                            </span>
+                        </div>
+                    </ng-container>
+                    <ng-template #noInterests>-</ng-template>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full mt-6 space-y-3">
+            <button (click)="goToEditProfile()" class="w-full py-2 px-4 rounded-full font-bold text-sm transition-all duration-300 shadow-md whitespace-nowrap border-2
+               bg-green-700 text-white border-green-800 hover:bg-green-600 hover:border-green-700 cursor-pointer">
+                ✏️ Edit Profile
+            </button>
+
+            <button
+                class="w-full py-2 px-4 rounded-full font-bold text-sm transition-all duration-300 shadow-md whitespace-nowrap border-2
+               bg-yellow-500 text-black border-yellow-600 hover:bg-yellow-400 hover:border-yellow-500 cursor-pointer flex items-center justify-center gap-2">
+                📊 Take a Survey
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <!-- Reviews Section -->
+    <div class="bg-white shadow-md rounded-xl p-6 w-full md:w-2/3">
+        <h3 class="text-xl font-semibold mb-4 border-b-4 pb-2 border-[#BF4408]">User Reviews</h3>
+
+        <div *ngIf="user.reviews?.length === 0" class="text-gray-500">No reviews yet.</div>
+
+        <div *ngFor="let review of user.reviews"
+            class="relative flex bg-white shadow-md rounded-xl overflow-hidden border-l-4 border-[#BF4408] mb-4 hover:shadow-lg transition">
+
+            <!-- Photo -->
+            <div class="flex-shrink-0">
+                <img [src]="review.place.photo?.medium_url || 'https://via.placeholder.com/80'"
+                    alt="Photo of {{ review.place.name }}" class="w-30 h-30 object-cover" />
+            </div>
+
+            <!-- Content -->
+            <div class="flex flex-col justify-around px-4 py-2 flex-grow">
+
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-sm font-semibold text-gray-800 flex items-center gap-1">
+                            <svg class="w-4 h-4 text-[#BF4408]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7z" />
+                            </svg>
+                            {{ review.place.name }}
+                        </div>
+                        <div class="text-xs text-gray-500">{{ review.place.address_string }}</div>
+                    </div>
+
+                    <div class="text-xs text-gray-400 whitespace-nowrap">
+                        {{ review.created_at | date: 'mediumDate' }}
+                    </div>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="text-amber-700 font-bold">{{ review.rating }}</span>
+
+                    <ng-container *ngFor="let star of getRatingStars(review.rating)">
+                        <div class="relative h-5 w-5">
+                            <svg *ngIf="star < 1" xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 absolute text-gray-300 fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                            </svg>
+
+                            <div *ngIf="star > 0 && star < 1" class="absolute overflow-hidden"
+                                [style.width.%]="star * 100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 fill-current"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                                </svg>
+                            </div>
+
+                            <svg *ngIf="star >= 1" xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 absolute text-amber-500 fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                            </svg>
+                        </div>
+                    </ng-container>
+                </div>
+
+
+                <!-- Review Text -->
+                <p class="text-sm text-gray-700 line-clamp-2">
+                    {{ review.review_text }}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

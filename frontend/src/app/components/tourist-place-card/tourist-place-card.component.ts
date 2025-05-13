@@ -38,27 +38,21 @@ export class TouristPlaceCardComponent {
   }
 
  getFormattedRating(): string {
-    if (this.rating === null) return 'N/A';
-    return this.rating.toFixed(1);
+    return this.rating !== null ? this.rating.toFixed(1) : 'N/A';
   }
 
   getRatingStars(): number[] {
-  if (!this.hasRating) return [];
-  
-  const fullStars = Math.floor(this.rating as number);
-  const decimalPart = (this.rating as number) - fullStars;
-  const stars = Array(5).fill(0);
-  
-  for (let i = 0; i < fullStars; i++) {
-    stars[i] = 1;
+    const r = this.rating;
+    if (r === null) return [];
+
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      const diff = r - i;
+      stars.push(diff >= 1 ? 1 : diff > 0 ? diff : 0);
+    }
+    return stars;
   }
-  
-  if (decimalPart > 0 && fullStars < 5) {
-    stars[fullStars] = decimalPart;
-  }
-  
-  return stars;
-}
+
 
   getSafeCategories(): string[] {
     return Array.isArray(this.categories) ? this.categories : [];

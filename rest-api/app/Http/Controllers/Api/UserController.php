@@ -21,7 +21,9 @@ class UserController extends Controller
     // Show user profile
     public function show(Request $request)
     {
-        $user = $request->user()->load('reviews');
+        $user = $request->user()->load([
+            'reviews.place.photos' // підвантажуємо фото разом із місцем
+        ]);
 
         return new UserResource($user);
     }
@@ -35,26 +37,31 @@ class UserController extends Controller
             'name' => 'sometimes|string|max:255',
             'bio' => 'nullable|string',
             'location' => 'nullable|string|max:255',
-            'interests' => 'nullable|array',
+            'interests' => 'nullable|string',
             'interests.*' => 'string',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            //'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
-            if ($request->hasFile('avatar')) {
-                if ($user->avatar) {
-                    Storage::delete('public/avatars/' . $user->avatar);
-                }
+            // if ($request->hasFile('avatar')) {
+            //     if ($user->avatar) {
+            //         Storage::delete('public/avatars/' . $user->avatar);
+            //     }
 
-                $avatarName = $user->id . '_' . time() . '.' . $request->avatar->extension();
-                $avatarPath = $request->file('avatar')->storeAs(
-                    'avatars',
-                    $avatarName,
-                    'public'
-                );
-                $dataToUpdate['avatar'] = $avatarName;
+            //     $avatarName = $user->id . '_' . time() . '.' . $request->avatar->extension();
+            //     $avatarPath = $request->file('avatar')->storeAs(
+            //         'avatars',
+            //         $avatarName,
+            //         'public'
+            //     );
+            //     $dataToUpdate['avatar'] = $avatarName;
+            // }
+
+            if (isset($validatedData['interests'])) {
+                $interests = explode(',', $validatedData['interests']);
+                $interests = array_map('trim', $interests);
+                $validatedData['interests'] = array_filter($interests) ?: null;
             }
-
             $user->update($dataToUpdate);
 
             return new UserResource($user);
