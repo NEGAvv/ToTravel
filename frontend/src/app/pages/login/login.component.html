@@ -71,9 +71,9 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full py-2 px-4 rounded-full font-bold text-sm transition-all duration-300 shadow-md whitespace-nowrap border-2"
+                    class="w-full py-2 px-4 rounded-full font-bold text-sm transition-all duration-300 shadow-md whitespace-nowrap border-2 "
                     [ngClass]="{
-    'bg-white text-[#BF4408] border-[#BF4408] hover:bg-[#BF4408] hover:text-white': !loginForm.invalid,
+    'bg-white text-[#BF4408] cursor-pointer border-[#BF4408] hover:bg-[#BF4408] hover:text-white': !loginForm.invalid,
     'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed': loginForm.invalid
   }" [disabled]="loginForm.invalid">
                     Login

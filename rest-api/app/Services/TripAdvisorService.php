@@ -103,7 +103,7 @@ class TripAdvisorService
                     $category = Category::firstOrCreate([
                         'name' => $categoryName,
                     ]);
-        
+
                     $touristPlace->categories()->syncWithoutDetaching([$category->id]);
                 }
 
@@ -146,7 +146,7 @@ class TripAdvisorService
             ->get($url, [
                 'key' => $key,
                 'language' => 'en',
-                'limit' => 3,
+                'limit' => 5,
             ]);
 
         if ($response->failed()) return [];

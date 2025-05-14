@@ -43,15 +43,21 @@ class TouristPlaceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($locationId)
+    // public function show($locationId)
+    // {
+    //     return TouristPlace::with(['categories', 'reviews', 'photos'])
+    //         ->withCount('likes')
+    //         ->where('location_id', $locationId)
+    //         ->firstOrFail();
+    // }
+
+
+    public function show($id)
     {
-        return TouristPlace::with(['categories', 'reviews', 'photos'])
+        return TouristPlace::with(['categories', 'reviews.user', 'photos'])
             ->withCount('likes')
-            ->where('location_id', $locationId)
-            ->firstOrFail();
+            ->findOrFail($id);
     }
-
-
 
     /**
      * Store a newly created resource in storage.

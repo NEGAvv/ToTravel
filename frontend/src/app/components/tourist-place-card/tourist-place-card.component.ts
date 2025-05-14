@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tourist-place-card',
@@ -10,6 +11,7 @@ import { Component, Input } from '@angular/core';
 export class TouristPlaceCardComponent {
  @Input() place!: any;
 
+ constructor(private router: Router) {}
   get imageUrl(): string {
     return this.place.photos?.[0]?.medium_url || 'https://via.placeholder.com/300x200?text=No+Image';
   }
@@ -58,5 +60,8 @@ export class TouristPlaceCardComponent {
     return Array.isArray(this.categories) ? this.categories : [];
   }
   
+  goToDetails() {
+  this.router.navigate(['/places', this.place.id]);
+}
   Math = Math;
 }

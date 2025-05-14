@@ -1,5 +1,6 @@
 <div
-  class="rounded-xl overflow-hidden transition-all duration-300 w-[300px] h-[420px] flex flex-col cursor-pointer group">
+  class="rounded-xl overflow-hidden transition-all duration-300 w-[300px] h-[420px] flex flex-col cursor-pointer group"
+  (click)="goToDetails()">
   <div class="relative h-64 overflow-hidden">
     <img [src]="imageUrl" [alt]="place.name"
       class="w-full h-full object-cover group-hover:scale-100 transition-transform duration-500" />

@@ -11,13 +11,16 @@ import { TouristPlaceCardComponent } from '../../components/tourist-place-card/t
 })
 export class HomeComponent implements OnInit {
   touristPlaces: any[] = [];
-
+isLoading = true;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get<any[]>('http://127.0.0.1:8000/api/places')
       .subscribe({
-        next: data => this.touristPlaces = data,
+        next: data => {
+          this.touristPlaces = data;
+          this.isLoading = false;
+        },
         error: err => console.error('Failed to load places:', err)
       });
   }

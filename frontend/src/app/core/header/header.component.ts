@@ -11,7 +11,7 @@ import { AuthService, User } from '../auth/auth.service';
 })
 export class HeaderComponent {
   userData: User['data'] | null = null;
-  defaultAvatar = 'default-avatar.png'; 
+  defaultAvatar = 'default_avatar.png'; 
 
  constructor(private authService: AuthService, private router: Router) {}
 
