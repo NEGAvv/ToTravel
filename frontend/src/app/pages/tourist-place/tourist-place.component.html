@@ -28,116 +28,12 @@
 </div>
 
 <div *ngIf="!isLoading" class="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto space-y-10">
-    <!-- Tourist Place -->
-    <div>
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">{{ place.name }}</h1>
-        <p class="text-gray-600 text-sm sm:text-base">{{ place.address_string }}, {{ place.country }}</p>
+    <app-tourist-place-details [place]="place" [isLiked]="isLiked" [activeImage]="activeImage"
+        (likeToggled)="togglePlaceLike()" (imageChanged)="activeImage = $event">
+    </app-tourist-place-details>
 
-        <div class="flex flex-wrap gap-4 items-center mt-2">
-            <div class="flex items-center gap-2">
-                <span class="text-amber-700 font-bold text-lg">{{ place.rating }}</span>
-                <ng-container *ngFor="let star of getRatingStars(place.rating)">
-                    <div class="relative w-5 h-5">
-                        <svg *ngIf="star < 1" xmlns="http://www.w3.org/2000/svg"
-                            class="absolute h-5 w-5 text-gray-300 fill-current" viewBox="0 0 20 20">
-                            <path
-                                d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                        </svg>
-                        <div *ngIf="star > 0 && star < 1" class="absolute overflow-hidden" [style.width.%]="star * 100">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 fill-current"
-                                viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                            </svg>
-                        </div>
-                        <svg *ngIf="star >= 1" xmlns="http://www.w3.org/2000/svg"
-                            class="absolute h-5 w-5 text-amber-500 fill-current" viewBox="0 0 20 20">
-                            <path
-                                d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                        </svg>
-                    </div>
-                </ng-container>
-            </div>
+    <app-review-list [reviews]="place.reviews" [placeId]="place.id" (like)="handleReviewLike($event)">
+    </app-review-list>
 
-            <div class="flex flex-wrap gap-2">
-                <span *ngFor="let category of place.categories"
-                    class="text-xs px-3 py-1 rounded-full bg-amber-100 text-amber-800">
-                    {{ category.name }}
-                </span>
-            </div>
-        </div>
-    </div>
 
-    <div class="flex flex-col lg:flex-row gap-10">
-
-        <div class="w-full lg:w-1/2 flex flex-row gap-4 relative">
-            <div
-                class="flex flex-col gap-2 overflow-y-auto max-h-96 min-w-[7rem] w-28 z-10 relative ">
-                <div *ngFor="let photo of place.photos" class="relative h-20 w-28 flex-shrink-0">
-                    <img [src]="photo.small_url" (click)="activeImage = photo.original_url"
-                        [class.opacity-100]="activeImage === photo.original_url || (!activeImage && photo === place.photos[0])"
-                        [class.opacity-60]="activeImage !== photo.original_url && !(!activeImage && photo === place.photos[0])"
-                        class="w-full h-full object-cover rounded-md cursor-pointer border-2 transition-all duration-200"
-                        [class.border-amber-500]="activeImage === photo.original_url || (!activeImage && photo === place.photos[0])"
-                        [class.border-transparent]="activeImage !== photo.original_url && !(!activeImage && photo === place.photos[0])" />
-                </div>
-            </div>
-
-            <div class="flex-grow h-96 overflow-hidden rounded-xl flex justify-center items-center relative z-0">
-                <img [src]="activeImage || place.photos[0].original_url"
-                    class="max-h-full max-w-full object-contain pointer-events-none block" />
-            </div>
-        </div>
-
-        <div class="w-full lg:w-1/2 space-y-8">
-            <div>
-                <h2 class="text-2xl font-semibold text-gray-800">Description</h2>
-                <p class="mt-2 text-gray-700 leading-relaxed">{{ place.description }}</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reviews -->
-    <div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Reviews</h3>
-
-        <div *ngIf="place.reviews.length === 0" class="text-gray-500 text-sm">No reviews yet.</div>
-
-        <div *ngFor="let review of place.reviews" class="bg-white p-5 rounded-xl shadow-md mb-6 space-y-2">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-1">
-                    <ng-container *ngFor="let star of getRatingStars(review.rating)">
-                        <div class="relative w-4 h-4">
-                            <svg *ngIf="star < 1" xmlns="http://www.w3.org/2000/svg"
-                                class="absolute h-4 w-4 text-gray-300 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                            </svg>
-                            <div *ngIf="star > 0 && star < 1" class="absolute overflow-hidden"
-                                [style.width.%]="star * 100">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500 fill-current"
-                                    viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                                </svg>
-                            </div>
-                            <svg *ngIf="star >= 1" xmlns="http://www.w3.org/2000/svg"
-                                class="absolute h-4 w-4 text-amber-500 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
-                            </svg>
-                        </div>
-                    </ng-container>
-                </div>
-
-                <div class="text-sm text-gray-500">{{ review.created_at | date:'mediumDate' }}</div>
-            </div>
-
-            <p class="text-gray-700">{{ review.review_text }}</p>
-
-            <div class="text-sm text-gray-500 italic">
-                – {{ review.user?.name || 'Anonymous' }}
-            </div>
-        </div>
-    </div>
 </div>

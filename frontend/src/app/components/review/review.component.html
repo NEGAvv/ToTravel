@@ -1,0 +1,135 @@
+<!-- Review Component -->
+<div class="space-y-2" [@listAnimation]="review.comments?.length">
+    <div class="bg-white pl-6 pr-6 pt-6 pb-2 rounded-xl shadow-sm border border-gray-100 space-y-2 relative">
+        <!-- Rating and User Info -->
+        <div class="flex justify-between items-start">
+            <div class="space-y-1">
+                <div class="flex items-center gap-1">
+                    <ng-container *ngFor="let star of getRatingStars(review.rating)">
+                        <div class="relative w-4 h-4">
+                            <svg *ngIf="star < 1" xmlns="http://www.w3.org/2000/svg"
+                                class="absolute h-4 w-4 text-gray-300 fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                            </svg>
+                            <div *ngIf="star > 0 && star < 1" class="absolute overflow-hidden"
+                                [style.width.%]="star * 100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500 fill-current"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                                </svg>
+                            </div>
+                            <svg *ngIf="star >= 1" xmlns="http://www.w3.org/2000/svg"
+                                class="absolute h-4 w-4 text-amber-500 fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049.927L11.317 6.6h6.163L12.94 10.6l2.268 5.673-5.159-3.17-5.16 3.17L7.06 10.6 2.52 6.6h6.163z" />
+                            </svg>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div class="text-sm text-gray-500 italic">
+                    – {{ review.user?.name || 'Anonymous' }}
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2" *ngIf="canEditReview">
+                    <!-- Edit button -->
+                    <button (click)="toggleEditForm()"
+                        class="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition cursor-pointer"
+                        title="{{ showEditForm ? 'Cancel edit' : 'Edit review' }}" aria-label="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.212 3 21l1.788-4.5 12.074-13.013z" />
+                        </svg>
+                    </button>
+
+                    <!-- Delete button -->
+                    <button (click)="deleteReview()"
+                        class="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition cursor-pointer"
+                        title="Delete review" aria-label="Delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 3h6a1 1 0 011 1v2H8V4a1 1 0 011-1z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <span class="text-sm text-gray-400">{{ review.created_at | date: 'mediumDate' }}</span>
+
+                <!-- Like button -->
+                <button class="flex items-center gap-1 p-2 rounded-full hover:bg-red-100 transition cursor-pointer"
+                    (click)="toggleLike()" title="Like review" aria-label="Like">
+                    <svg class="w-5 h-5" [ngClass]="review.liked ? 'text-red-600' : 'text-gray-400'" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                    </svg>
+                    <span class="text-sm text-gray-600">{{ review.likes }}</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Review Text -->
+        <div *ngIf="showEditForm" @editFormAnimation class="mt-4 p-4 bg-gray-50 rounded-lg">
+            <textarea [(ngModel)]="editedReviewText"
+                class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                rows="3" placeholder="Edit your review"></textarea>
+
+            <div class="mt-2 flex items-center gap-2">
+                <span class="text-sm text-gray-600">Rating:</span>
+                <select [(ngModel)]="editedRating" class="border rounded px-2 py-1 text-sm">
+                    <option *ngFor="let i of [1,2,3,4,5]" [value]="i">{{i}}</option>
+                </select>
+            </div>
+
+            <div class="mt-3 flex justify-end gap-2">
+                <button (click)="toggleEditForm()" class="px-3 py-1 text-sm text-gray-600 hover:text-gray-800">
+                    Cancel
+                </button>
+                <button (click)="submitEdit()" [disabled]="!editedReviewText.trim() || isSubmitting"
+                    class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-300">
+                    {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+                </button>
+            </div>
+        </div>
+
+        <p *ngIf="!showEditForm" class="text-gray-700 text-sm leading-relaxed" [@fadeInOut]>{{ review.review_text }}</p>
+
+        <div class="mt-1 mb-2 x">
+            <button (click)="toggleCommentForm()" [@buttonHover]="buttonState['addComment']"
+                (mouseenter)="onButtonHover('addComment', true)" (mouseleave)="onButtonHover('addComment', false)"
+                class="px-3 py-1 text-xs font-medium rounded-full border border-blue-100 bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
+                {{ showCommentForm ? 'Cancel' : '+ Add Comment' }}
+            </button>
+        </div>
+
+        <div *ngIf="showCommentForm" @editFormAnimation class="mt-2 mb-3">
+            <textarea [(ngModel)]="newComment"
+                class="w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                rows="2" placeholder="Write your comment..."></textarea>
+            <div class="mt-2 flex justify-end gap-2">
+                <button (click)="toggleCommentForm()"
+                    class="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors cursor-pointer">
+                    Cancel
+                </button>
+                <button (click)="submitComment()" [disabled]="!newComment.trim() || isSubmitting"
+                    class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-300 transition-colors cursor-pointer">
+                    {{ isSubmitting ? 'Posting...' : 'Post Comment' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="space-y-1 pl-3" [@listAnimation]>
+        <app-comment *ngFor="let comment of review.comments" [comment]="comment"
+            (deleted)="handleDeleteComment($event)"></app-comment>
+    </div>
+    <div class="pb-1"></div>
+</div>

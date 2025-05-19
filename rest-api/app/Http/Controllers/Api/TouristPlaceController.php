@@ -54,10 +54,17 @@ class TouristPlaceController extends Controller
 
     public function show($id)
     {
-        return TouristPlace::with(['categories', 'reviews.user', 'photos'])
-            ->withCount('likes')
+        return TouristPlace::with([
+            'categories',
+            'reviews.user',
+            'reviews.comments.user', 
+            'reviews.likes',        
+            'photos',
+        ])
+            ->withCount('likes') 
             ->findOrFail($id);
     }
+
 
     /**
      * Store a newly created resource in storage.

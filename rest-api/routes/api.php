@@ -37,8 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('reviews/{review}', [ReviewController::class, 'update']);
     Route::delete('reviews/{review}', [ReviewController::class, 'destroy']);
 
-    //Route::apiResource('reviews', ReviewController::class)->only(['index', 'show']);
-
     // Comments
     Route::post('reviews/{review}/comments', [CommentController::class, 'store']);
     Route::delete('comments/{comment}', [CommentController::class, 'destroy']);

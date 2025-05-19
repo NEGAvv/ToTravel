@@ -23,12 +23,12 @@ export interface User {
 export class AuthService {
 
 
-  private apiUrl  = 'http://127.0.0.1:8000/api'; 
+  public apiUrl  = 'http://127.0.0.1:8000/api'; 
 
    private _isLoggedIn$!: BehaviorSubject<boolean>;
   isLoggedIn$!: Observable<boolean>;
 
-  constructor(private http: HttpClient, private token: TokenService) {
+  constructor(private http: HttpClient, public token: TokenService) {
     this._isLoggedIn$ = new BehaviorSubject<boolean>(this.token.hasToken());
     this.isLoggedIn$ = this._isLoggedIn$.asObservable();
   }

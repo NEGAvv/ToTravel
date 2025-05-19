@@ -11,7 +11,14 @@
       <ul class="flex flex-col sm:flex-row gap-3 sm:gap-6 text-base sm:text-md font-medium text-gray-700">
         <li><a routerLink="/" class="hover:text-[#BF4408] py-1 sm:py-0">Home</a></li>
         <li><a routerLink="/places" class="hover:text-[#BF4408] py-1 sm:py-0">Tourist Places</a></li>
-        <li><a routerLink="/reviews" class="hover:text-[#BF4408] py-1 sm:py-0">Reviews</a></li>
+        <li><a routerLink="/saved-places" class="flex items-center gap-2 text-gray-700 hover:text-amber-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+            Saved Places
+          </a></li>
       </ul>
     </div>
 
@@ -40,7 +47,7 @@
 
       <!-- Dropdown menu -->
       <div class="relative inline-block text-left ">
-        <button (click)="toggleDropdown()" 
+        <button (click)="toggleDropdown()"
           class="cursor-pointer flex items-center text-sm font-semibold text-gray-800 hover:text-[#BF4408] transition-colors duration-300 rounded-lg focus:outline-none">
           <img class="w-8 h-8 me-2 rounded-full border-2 border-[#BF4408]"
             [src]="userData?.avatar_url || defaultAvatar">

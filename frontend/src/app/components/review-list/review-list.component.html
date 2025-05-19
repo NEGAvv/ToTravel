@@ -1,0 +1,21 @@
+<!-- Review List Component -->
+<div class="space-y-8">
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-semibold text-gray-800">Reviews</h2>
+        <a [routerLink]="['/places', placeId, 'review']"
+            class="px-4 py-2 bg-[#BF4408] hover:bg-[#e04e0e] text-white text-sm rounded-lg shadow-sm transition">
+            Leave a Review
+        </a>
+    </div>
+
+    <div *ngIf="reviews.length === 0" class="py-4 text-gray-500 text-sm italic">
+        No reviews yet.
+    </div>
+
+    <div class="space-y-2">
+        <app-review *ngFor="let review of reviews" [review]="review" [placeId]="placeId" (like)="onToggleLike($event)"
+            (commentAdded)="handleCommentAdded($event)" (commentDeleted)="handleCommentDeleted($event)"
+            (reviewDeleted)="handleReviewDeleted($event)" (reviewUpdated)="handleReviewUpdated($event)">
+        </app-review>
+    </div>
+</div>

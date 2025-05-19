@@ -23,7 +23,6 @@ class LikeController extends Controller
 
         $user = $request->user();
 
-        // Заборонити одночасний лайк на place і review
         if (!$request->place_id && !$request->review_id) {
             return response()->json(['error' => 'place_id or review_id is required'], 422);
         }
@@ -83,6 +82,7 @@ class LikeController extends Controller
         $places = TouristPlace::whereHas('likes', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })
+        ->with(['photos', 'categories', 'likes'])
         ->withCount('likes')
         ->get();
     

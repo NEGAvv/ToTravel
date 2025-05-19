@@ -7,6 +7,8 @@ import { authGuard } from './core/auth/guards/auth.guard';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditComponent } from './pages/profile/edit/edit.component';
 import { TouristPlaceComponent } from './pages/tourist-place/tourist-place.component';
+import { ReviewComponent } from './pages/review/review.component';
+import { SavedPlacesComponent } from './pages/saved-places/saved-places.component';
 
 
 export const routes: Routes = [
@@ -18,6 +20,8 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'profile/edit', component: EditComponent },
       { path: 'places/:id', component: TouristPlaceComponent },
+      { path: 'places/:id/review', component: ReviewComponent },
+      { path: 'saved-places', component: SavedPlacesComponent },
 
     ],
     canActivate: [authGuard] 
