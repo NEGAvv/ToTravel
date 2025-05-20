@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Review extends Model
 {
@@ -41,14 +42,18 @@ class Review extends Model
     {
         static::created(function ($review) {
             $review->place->updateRating();
+            
+            cache()->forget('global_average_rating');
         });
 
         static::updated(function ($review) {
             $review->place->updateRating();
+            cache()->forget('global_average_rating');
         });
 
         static::deleted(function ($review) {
             $review->place->updateRating();
+            cache()->forget('global_average_rating');
         });
     }
 }

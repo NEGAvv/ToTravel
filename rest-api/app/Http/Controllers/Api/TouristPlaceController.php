@@ -30,26 +30,66 @@ class TouristPlaceController extends Controller
     }
 
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return TouristPlace::with(['categories', 'reviews', 'photos'])
-            ->withCount('likes')
-            ->get();
+        $queryBuilder = TouristPlace::with(['categories', 'reviews', 'photos'])
+            ->withCount('likes');
+
+        if ($request->filled('search')) {
+            $searchTerm = strtolower($request->search);
+
+            $queryBuilder->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
+
+            $checkResults = clone $queryBuilder;
+
+            if (!$checkResults->exists()) {
+                $results = $this->tripAdvisorService->search($searchTerm);
+
+                $queryBuilder = TouristPlace::with(['categories', 'reviews', 'photos'])
+                    ->withCount('likes')
+                    ->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
+            }
+        }
+
+
+        if ($request->filled('categories')) {
+            $queryBuilder->whereHas('categories', function ($q) use ($request) {
+                $q->whereIn('name', $request->categories);
+            });
+        }
+
+        if ($request->filled('rating')) {
+            $selectedRating = (float) $request->rating;
+            $queryBuilder->where('rating', '>=', $selectedRating)
+                ->where('rating', '<', $selectedRating + 1);
+        }
+
+        if ($request->filled('country')) {
+            $queryBuilder->where('country', $request->country);
+        }
+
+        if ($request->filled('sort_by')) {
+        $sortField = $request->sort_by;
+        $sortOrder = $request->get('sort_order', 'asc');
+
+        if (in_array($sortField, ['name', 'rating', 'likes_count'])) {
+            if ($sortField === 'rating') {
+                $queryBuilder->orderByRaw("rating IS NULL")
+                    ->orderBy('rating', $sortOrder);
+            } else {
+                $queryBuilder->orderBy($sortField, $sortOrder);
+            }
+        }
+    } else {
+        $queryBuilder->orderByRaw("quality_score IS NULL")
+            ->orderBy('quality_score', 'desc')
+            ->orderBy('rating_weighted', 'desc')
+            ->orderBy('review_count', 'desc'); 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show($locationId)
-    // {
-    //     return TouristPlace::with(['categories', 'reviews', 'photos'])
-    //         ->withCount('likes')
-    //         ->where('location_id', $locationId)
-    //         ->firstOrFail();
-    // }
+
+        return $queryBuilder->limit(12)->get();
+    }
 
 
     public function show($id)
@@ -57,11 +97,11 @@ class TouristPlaceController extends Controller
         return TouristPlace::with([
             'categories',
             'reviews.user',
-            'reviews.comments.user', 
-            'reviews.likes',        
+            'reviews.comments.user',
+            'reviews.likes',
             'photos',
         ])
-            ->withCount('likes') 
+            ->withCount('likes')
             ->findOrFail($id);
     }
 

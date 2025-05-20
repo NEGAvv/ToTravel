@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\RatingService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,11 @@ class TouristPlace extends Model
         'latitude',
         'longitude',
         'rating',
+        'rating_weighted',
+        'quality_score',
+        'review_count',
         'category',
+        
     ];
 
     public function reviews()
@@ -42,11 +47,27 @@ class TouristPlace extends Model
         return $this->hasMany(Photo::class);
     }
 
-    
-    public function updateRating()
+
+     public function updateRating()
     {
-        $averageRating = $this->reviews()->avg('rating');
-        $this->rating = round($averageRating, 1);
-        $this->save();
+        $reviews = $this->reviews();
+        
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $reviewCount = $reviews->count();
+        
+        $globalAverage = Review::avg('rating') ?? 3.0;
+        
+        $calculator = new RatingService($globalAverage);
+        
+        $weightedRating = $calculator->calculateWeightedRating($averageRating, $reviewCount);
+        $normalizedRating = $calculator->normalizeRating($weightedRating);
+        $qualityScore = $calculator->calculateQualityScore($normalizedRating);
+        
+        $this->update([
+            'rating' => round($averageRating, 1),
+            'rating_weighted' => round($weightedRating, 2),
+            'quality_score' => $qualityScore,
+            'review_count' => $reviewCount,
+        ]);
     }
 }

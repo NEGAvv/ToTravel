@@ -21,66 +21,74 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
 
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password123'),
-            'role' => 'ADMIN',
-            'bio' => 'Я головний адміністратор сайту.',
-            'location' => 'Київ, Україна',
-            'interests' => json_encode(['керування', 'моніторинг', 'безпека']),
-        ]);
+        // User::create([
+        //     'name' => 'Admin User',
+        //     'email' => 'admin@example.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password123'),
+        //     'role' => 'ADMIN',
+        //     'bio' => 'Я головний адміністратор сайту.',
+        //     'location' => 'Київ, Україна',
+        //     'interests' => json_encode(['керування', 'моніторинг', 'безпека']),
+        // ]);
 
         User::factory(10)->create();
 
         // Категорії і туристичні місця
-       // Category::factory(5)->create();
-        
+        // Category::factory(5)->create();
+
         // TouristPlace::factory(10)->create()->each(function ($place) {
         //     $categories = Category::inRandomOrder()->take(rand(1, 3))->pluck('id');
         //     $place->categories()->attach($categories);
         // });
 
         // // Завантаження існуючих записів
-        // $users = User::all();
-        // $places = TouristPlace::all();
+        $users = User::all();
+        $places = TouristPlace::all();
 
-        // if ($users->count() && $places->count()) {
-        //     Review::factory(20)->make()->each(function ($review) use ($users, $places) {
-        //         $review->user_id = $users->random()->id;
-        //         $review->place_id = $places->random()->id;
-        //         $review->save();
-        //     });
-        // }
+        if ($users->count() && $places->count()) {
+            Review::factory(50)->make()->each(function ($review) use ($users, $places) {
+                $review->user_id = $users->random()->id;
+                $review->place_id = $places->random()->id;
+                $review->save();
+            });
+        }
 
-        // $reviews = Review::all();
+        $reviews = Review::all();
 
-        // if ($users->count() && $reviews->count()) {
-        //     Comment::factory(30)->make()->each(function ($comment) use ($users, $reviews) {
-        //         $comment->user_id = $users->random()->id;
-        //         $comment->review_id = $reviews->random()->id;
-        //         $comment->save();
-        //     });
+        if ($users->count() && $reviews->count()) {
+            Comment::factory(100)->make()->each(function ($comment) use ($users, $reviews) {
+                $comment->user_id = $users->random()->id;
+                $comment->review_id = $reviews->random()->id;
+                $comment->save();
+            });
 
-        //     Like::factory(40)->make()->each(function ($like) use ($users, $places, $reviews) {
-        //         $like->user_id = $users->random()->id;
+            Like::factory(200)->make()->each(function ($like) use ($users, $places, $reviews) {
+                do {
+                    $like->user_id = $users->random()->id;
 
-        //         if ($places->count() && rand(0, 1)) {
-        //             $like->place_id = $places->random()->id;
-        //             $like->review_id = null;
-        //         } elseif ($reviews->count()) {
-        //             $like->place_id = null;
-        //             $like->review_id = $reviews->random()->id;
-        //         }
+                    if ($places->count() && rand(0, 1)) {
+                        $like->place_id = $places->random()->id;
+                        $like->review_id = null;
+                    } elseif ($reviews->count()) {
+                        $like->place_id = null;
+                        $like->review_id = $reviews->random()->id;
+                    }
 
-        //         $like->save();
-        //     });
-        // }
+                    // Check if this combination already exists
+                    $exists = Like::where('user_id', $like->user_id)
+                        ->where('place_id', $like->place_id)
+                        ->where('review_id', $like->review_id)
+                        ->exists();
+                } while ($exists);
+
+                $like->save();
+            });
+        }
     }
 }

@@ -2,16 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, User } from '../auth/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   userData: User['data'] | null = null;
   defaultAvatar = 'default_avatar.png'; 
+  searchQuery = '';
+  isDropdownOpen = false;
 
  constructor(private authService: AuthService, private router: Router) {}
 
@@ -28,11 +31,20 @@ export class HeaderComponent {
     });
   }
 
+  onSearch() {
+    if (this.searchQuery.trim()) {
+      this.router.navigate(['/places'], { 
+        queryParams: { search: this.searchQuery },
+        queryParamsHandling: 'merge' 
+      });
+    }
+  }
+
   onLogout() {
     this.authService.logout().subscribe(() => this.router.navigate(['/login']));
   }
 
-  isDropdownOpen = false;
+
 
 toggleDropdown() {
   this.isDropdownOpen = !this.isDropdownOpen;

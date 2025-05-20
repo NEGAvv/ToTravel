@@ -27,7 +27,7 @@
     <div class="animate-pulse h-4 w-96 bg-gray-200 rounded mb-2"></div>
   </div>
   <div *ngIf="!isLoading" class="mb-4 sm:mb-6">
-    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Discover your new favorite stay</h2>
+    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Discover your new favorite and top rated stay</h2>
     <p class="text-sm sm:text-base text-gray-600">Discover a variety of travel options ranging from relaxing beach
       getaways to adventurous mountain expeditions.</p>
   </div>
@@ -37,27 +37,5 @@
   </div>
   <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
     <app-tourist-place-card *ngFor="let place of touristPlaces" [place]="place"></app-tourist-place-card>
-  </div>
-</section>
-
-<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
-  <div *ngIf="isLoading">
-    <div class="animate-pulse h-6 w-72 bg-gray-300 rounded mb-2"></div>
-    <div class="animate-pulse h-4 w-96 bg-gray-200 rounded"></div>
-  </div>
-  <div *ngIf="!isLoading" class="mb-4 sm:mb-6">
-    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Top 10 Popular Locations</h2>
-    <p class="text-sm sm:text-base text-gray-600">If you're looking for something popular that you'll love, we've got
-      the trip for you.</p>
-  </div>
-
-  <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
-    <div *ngFor="let i of [1,2]" class="animate-pulse bg-gray-300 h-48 rounded"></div>
-  </div>
-  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
-    <img src="assets/location1.jpg" class="rounded shadow-sm sm:shadow-md w-full h-40 sm:h-48 md:h-56 object-cover"
-      loading="lazy" />
-    <img src="assets/location2.jpg" class="rounded shadow-sm sm:shadow-md w-full h-40 sm:h-48 md:h-56 object-cover"
-      loading="lazy" />
   </div>
 </section>
