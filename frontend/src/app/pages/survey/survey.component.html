@@ -1,0 +1,59 @@
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Survey of Preferences</h2>
+
+    <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 sm:p-8 mb-8 space-y-2">
+        <p class="text-lg font-semibold text-gray-800">Thank you for taking part</p>
+        <p class="text-sm text-gray-500">Please complete this form to help us improve future recommendations.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
+
+        <div>
+            <label for="country" class="block text-base font-medium text-gray-800 mb-2">
+                1. Preferred city or country
+            </label>
+            <input id="country" type="text" formControlName="country" required
+                class="w-full rounded-xl border border-gray-300 p-4 text-sm sm:text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-600" />
+        </div>
+
+        <div>
+            <label class="block text-base font-medium text-gray-800 mb-2">
+                2. Rate your preferred type of place
+                <span class="block text-sm text-gray-500 mt-1">1 = Strongly Agree, 5 = Strongly Disagree</span>
+            </label>
+            <div class="flex gap-3 mt-2">
+                <label *ngFor="let i of [1, 2, 3, 4, 5]" class="flex items-center gap-2 text-sm text-gray-700">
+                    <input type="radio" [value]="i" formControlName="rating" class="accent-orange-600" />
+                    <span>{{ i }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-base font-medium text-gray-800 mb-2">
+                3. What type of trips do you prefer?
+                <span class="text-sm text-red-500 ml-1">*</span>
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" formGroupName="selectedCategories">
+                <label *ngFor="let c of categories" class="flex items-center gap-3 text-sm text-gray-700">
+                    <input type="checkbox" [formControlName]="c" class="accent-orange-600" />
+                    <span>{{ c }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <button type="submit"
+                class="w-full bg-[#BF4408] hover:bg-[#e04e0e] text-white py-3 rounded-full text-base font-semibold shadow-md transition-transform hover:scale-[1.02] cursor-pointer">
+                Submit Preferences
+            </button>
+        </div>
+
+        <p *ngIf="submitted && form.invalid" class="text-red-600 text-sm">
+            Please fill all required fields and select at least one category.
+        </p>
+        <p *ngIf="responseMessage" class="text-green-600 font-medium">
+            {{ responseMessage }}
+        </p>
+    </form>
+</section>

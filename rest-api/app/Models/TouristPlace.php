@@ -24,7 +24,7 @@ class TouristPlace extends Model
         'quality_score',
         'review_count',
         'category',
-        
+
     ];
 
     public function reviews()
@@ -48,26 +48,27 @@ class TouristPlace extends Model
     }
 
 
-     public function updateRating()
+    public function updateRating()
     {
         $reviews = $this->reviews();
-        
+
         $averageRating = $reviews->avg('rating') ?? 0;
         $reviewCount = $reviews->count();
-        
+
         $globalAverage = Review::avg('rating') ?? 3.0;
-        
+
         $calculator = new RatingService($globalAverage);
-        
+
         $weightedRating = $calculator->calculateWeightedRating($averageRating, $reviewCount);
         $normalizedRating = $calculator->normalizeRating($weightedRating);
         $qualityScore = $calculator->calculateQualityScore($normalizedRating);
-        
+
         $this->update([
             'rating' => round($averageRating, 1),
             'rating_weighted' => round($weightedRating, 2),
             'quality_score' => $qualityScore,
             'review_count' => $reviewCount,
         ]);
+        $this->refresh();
     }
 }

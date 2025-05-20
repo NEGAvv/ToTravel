@@ -10,6 +10,7 @@ import { TouristPlaceComponent } from './pages/tourist-place/tourist-place.compo
 import { ReviewComponent } from './pages/review/review.component';
 import { SavedPlacesComponent } from './pages/saved-places/saved-places.component';
 import { SearchPlacesComponent } from './pages/search-places/search-places.component';
+import { SurveyComponent } from './pages/survey/survey.component';
 
 
 export const routes: Routes = [
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: 'places', component: SearchPlacesComponent },
       { path: 'places/:id/review', component: ReviewComponent },
       { path: 'saved-places', component: SavedPlacesComponent },
+      { path: 'survey', component: SurveyComponent },
 
     ],
     canActivate: [authGuard] 

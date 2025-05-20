@@ -33,6 +33,10 @@ class ReviewController extends Controller
             'review_text' => $validated['review_text'],
         ]);
 
+        $touristPlace->updateRating();
+        
+        cache()->forget('user_recommendations_' . $request->user()->id);
+
         return response()->json($review->load('user'), 201);
     }
 

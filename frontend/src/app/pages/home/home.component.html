@@ -12,7 +12,7 @@
         class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-md sm:drop-shadow-lg lg:drop-shadow-xl max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl leading-snug sm:leading-normal lg:leading-tight">
         Plan Your Dream Trip with ToTravel
       </h1>
-      <button
+      <button (click)="goToSurvey()"
         class="bg-[#BF4408] hover:bg-[#e04e0e] px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-4 rounded-lg sm:rounded-xl lg:rounded-2xl text-sm sm:text-base md:text-lg lg:text-xl font-semibold transition-all transform hover:scale-105  shadow-sm sm:shadow-md lg:shadow-lg cursor-pointer"
         aria-label="Start planning your trip">
         Get Started <span class="hidden sm:inline">→</span>
@@ -21,21 +21,50 @@
   </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
+
+<section
+  class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-16 bg-gradient-to-br from-white via-orange-50 to-orange-100 rounded-b-3xl shadow-md">
   <div *ngIf="isLoading">
     <div class="animate-pulse h-6 w-64 bg-gray-300 rounded mb-2"></div>
     <div class="animate-pulse h-4 w-96 bg-gray-200 rounded mb-2"></div>
   </div>
-  <div *ngIf="!isLoading" class="mb-4 sm:mb-6">
-    <h2 class="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">Discover your new favorite and top rated stay</h2>
-    <p class="text-sm sm:text-base text-gray-600">Discover a variety of travel options ranging from relaxing beach
-      getaways to adventurous mountain expeditions.</p>
+
+  <div *ngIf="!isLoading" class="mb-8 text-center relative">
+
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mt-12">Recommended for you</h2>
+    <p class="text-base sm:text-lg text-gray-700 mt-2 max-w-2xl mx-auto">
+      Places that match your travel style, interests and preferences.
+    </p>
   </div>
 
-  <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-    <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="animate-pulse bg-gray-300 h-56 rounded"></div>
+  <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="animate-pulse bg-gray-300 h-56 rounded-xl shadow"></div>
   </div>
-  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    <app-tourist-place-card *ngFor="let place of recommendedPlaces" [place]="place"></app-tourist-place-card>
+  </div>
+</section>
+
+
+
+<section
+  class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-16 mt-5 bg-gray-50 border-t border-gray-200 rounded-t-3xl shadow-inner ">
+  <div *ngIf="isLoading">
+    <div class="animate-pulse h-6 w-64 bg-gray-300 rounded mb-2"></div>
+    <div class="animate-pulse h-4 w-96 bg-gray-200 rounded mb-2"></div>
+  </div>
+
+  <div *ngIf="!isLoading" class="mb-6 sm:mb-8 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Popular destinations</h2>
+    <p class="text-sm sm:text-base text-gray-600 mt-2 max-w-xl mx-auto">
+      Explore trending places loved by travelers across the globe.
+    </p>
+  </div>
+
+  <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="animate-pulse bg-gray-300 h-56 rounded-xl"></div>
+  </div>
+  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
     <app-tourist-place-card *ngFor="let place of touristPlaces" [place]="place"></app-tourist-place-card>
   </div>
 </section>

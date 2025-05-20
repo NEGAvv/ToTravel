@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\TouristPlaceController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserPreferenceController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -17,6 +18,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
+
+
+    Route::post('/preferences', [UserPreferenceController::class, 'store']);
+    Route::get('/preferences', [UserPreferenceController::class, 'show']);
+    Route::get('/user/preferences/recommendations', [UserPreferenceController::class, 'recommendations']);
+   
 
     // Routes of the tourist places
     Route::get('/places/search', [TouristPlaceController::class, 'search']);

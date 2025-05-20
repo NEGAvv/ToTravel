@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -56,5 +56,8 @@ export class ProfileComponent implements OnInit {
 
 goToEditProfile() {
     this.router.navigate(['/profile/edit']);
+}
+goToSurvey() {
+  this.router.navigate(['/survey']);
 }
 }
