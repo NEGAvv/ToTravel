@@ -2,12 +2,26 @@
     <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-md">
 
         <!-- Avatar -->
-        <div class="flex justify-center mb-6">
-            <div class="w-24 h-24 rounded-full bg-gray-100 overflow-hidden shadow-inner">
+        <!-- Avatar -->
+        <!-- Avatar -->
+        <div class="flex flex-col items-center mb-6">
+            <div class="relative w-28 h-28 rounded-full overflow-hidden shadow-inner bg-gray-100">
                 <img [src]="user.avatar_url || 'https://via.placeholder.com/100'" alt="User avatar"
                     class="w-full h-full object-cover" />
             </div>
+
+            <!-- Схований інпут -->
+            <input #avatarInput type="file" accept="image/*" hidden (change)="onAvatarSelected($event)" />
+
+            <!-- Кнопка нижче -->
+            <button type="button" (click)="avatarInput.click()"
+                class="mt-3 bg-white text-[#BF4408] border border-[#BF4408] px-4 py-1.5 text-sm rounded-full shadow hover:bg-[#BF4408] hover:text-white transition-all duration-200"
+                title="Завантажити нове фото">
+                Змінити фото
+            </button>
         </div>
+
+
 
         <!-- Name -->
         <div class="mb-4">

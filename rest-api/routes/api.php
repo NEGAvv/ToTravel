@@ -12,6 +12,13 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserPreferenceController;
 
+
+
+Route::get('/test-image', function () {
+    return response()->file(storage_path('app/private/public/avatars/2_avatar_1747833908.jpg'));
+});
+
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -23,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/preferences', [UserPreferenceController::class, 'store']);
     Route::get('/preferences', [UserPreferenceController::class, 'show']);
     Route::get('/user/preferences/recommendations', [UserPreferenceController::class, 'recommendations']);
-   
+
 
     // Routes of the tourist places
     Route::get('/places/search', [TouristPlaceController::class, 'search']);
@@ -61,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [UserController::class, 'show']);
     Route::put('/profile', [UserController::class, 'update']);
     Route::delete('/profile', [UserController::class, 'destroyOwnProfile']);
+    Route::post('/profile/avatar', [UserController::class, 'updateAvatar']);
 
     // Admin routes
     Route::get('/admin/users', [UserController::class, 'index']);

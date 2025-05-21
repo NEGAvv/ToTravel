@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->role === 'ADMIN';
     }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/avatars/' . $this->avatar) : null;
+    }
 }

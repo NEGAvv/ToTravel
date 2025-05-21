@@ -41,7 +41,6 @@ class UserController extends Controller
             'location' => 'nullable|string|max:255',
             'interests' => 'nullable|string',
             'interests.*' => 'string',
-            //'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -53,6 +52,43 @@ class UserController extends Controller
             $user->update($dataToUpdate);
 
             return new UserResource($user);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Avatar upload failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        try {
+            if ($user->avatar) {
+                Storage::disk('public')->delete('avatars/' . $user->avatar);
+
+            }
+
+            $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->extension();
+            $request->avatar->storeAs('avatars', $avatarName, 'public');
+
+
+            $user->avatar = $avatarName;
+            $user->save();
+
+            $avatarUrl = asset('storage/avatars/' . $avatarName);
+
+            return response()->json([
+                'message' => 'Avatar uploaded successfully',
+                'data' => [
+                    'avatar_url' => $avatarUrl
+                ]
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Avatar upload failed',

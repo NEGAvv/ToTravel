@@ -40,8 +40,12 @@ export class ProfileComponent implements OnInit {
   }
 
   get avatarUrl(): string {
-    return this.user?.avatar_url || 'default_avatar.png';
-  }
+    // Додайте перевірку на повний URL
+    if (this.user?.avatar_url) {
+        return this.user.avatar_url;
+    }
+    return 'assets/images/default_avatar.png'; // Використовуйте шлях до дефолтного аватара у вашому проекті
+}
 
   
   getRatingStars(rating: any): number[] {

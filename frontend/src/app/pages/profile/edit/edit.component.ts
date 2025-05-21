@@ -137,6 +137,25 @@ onBioKeyDown(event: KeyboardEvent) {
     }
   }
 
+  onAvatarSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
+
+  const file = input.files[0];
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  this.http.post('http://localhost:8000/api/profile/avatar', formData).subscribe({
+    next: (res: any) => {
+      this.user.avatar_url = res.data.avatar_url;
+    },
+    error: (err) => {
+      console.error('Помилка завантаження аватара', err);
+      alert('Не вдалося оновити аватар.');
+    }
+  });
+}
+
   
   }
 
