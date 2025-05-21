@@ -11,6 +11,7 @@ import { ReviewComponent } from './pages/review/review.component';
 import { SavedPlacesComponent } from './pages/saved-places/saved-places.component';
 import { SearchPlacesComponent } from './pages/search-places/search-places.component';
 import { SurveyComponent } from './pages/survey/survey.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 
 
 export const routes: Routes = [
@@ -26,7 +27,7 @@ export const routes: Routes = [
       { path: 'places/:id/review', component: ReviewComponent },
       { path: 'saved-places', component: SavedPlacesComponent },
       { path: 'survey', component: SurveyComponent },
-
+      { path: 'admin', component: AdminPanelComponent },
     ],
     canActivate: [authGuard] 
   },

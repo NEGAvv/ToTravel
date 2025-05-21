@@ -15,6 +15,7 @@ export class HeaderComponent {
   defaultAvatar = 'default_avatar.png'; 
   searchQuery = '';
   isDropdownOpen = false;
+isMobileMenuOpen = false;
 
  constructor(private authService: AuthService, private router: Router) {}
 
@@ -44,10 +45,12 @@ export class HeaderComponent {
     this.authService.logout().subscribe(() => this.router.navigate(['/login']));
   }
 
-
-
 toggleDropdown() {
   this.isDropdownOpen = !this.isDropdownOpen;
 }
+
+toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 
 }

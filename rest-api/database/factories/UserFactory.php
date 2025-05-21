@@ -48,7 +48,7 @@ class UserFactory extends Factory
             'role' => 'USER',
             'bio' => $this->faker->realTextBetween(40, 100),
             'location' => $this->faker->city() . ', ' . $this->faker->country(),
-            'interests' => json_encode($this->faker->randomElements($interestsPool, rand(2, 4))),
+            'interests' => implode(', ', $this->faker->randomElements($interestsPool, rand(2, 4))), 
             'remember_token' => Str::random(10),
         ];
     }

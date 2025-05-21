@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Review;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReviewResource;
 use App\Models\TouristPlace;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,6 +19,7 @@ class ReviewController extends Controller
     {
         return $touristPlace->reviews()->with('user', 'comments.user')->latest()->get();
     }
+
 
     public function store(Request $request, TouristPlace $touristPlace)
     {
@@ -34,7 +36,7 @@ class ReviewController extends Controller
         ]);
 
         $touristPlace->updateRating();
-        
+
         cache()->forget('user_recommendations_' . $request->user()->id);
 
         return response()->json($review->load('user'), 201);

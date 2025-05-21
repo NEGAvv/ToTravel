@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Routes of the tourist places
     Route::get('/places/search', [TouristPlaceController::class, 'search']);
     Route::get('places', [TouristPlaceController::class, 'index']);
+    Route::get('places/all', [TouristPlaceController::class, 'showAll']);
     Route::get('places/{touristPlace}', [TouristPlaceController::class, 'show']);
     Route::post('places', [TouristPlaceController::class, 'store']);
     Route::put('places/{touristPlace}', [TouristPlaceController::class, 'update']);
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Reviews
     Route::get('/places/{touristPlace}/reviews', [ReviewController::class, 'index']);
+    Route::get('/places/reviews', [ReviewController::class, 'showAll']);
     Route::post('places/{touristPlace}/reviews', [ReviewController::class, 'store']);
     Route::put('reviews/{review}', [ReviewController::class, 'update']);
     Route::delete('reviews/{review}', [ReviewController::class, 'destroy']);
@@ -65,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/users/search', [UserController::class, 'search']);
     Route::put('/admin/users/{id}', [UserController::class, 'adminUpdate']);
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/admin/stats', [UserController::class, 'stats']);
 
     // Admin review management
     Route::delete('/admin/reviews/{review}', [ReviewController::class, 'adminDestroy']);

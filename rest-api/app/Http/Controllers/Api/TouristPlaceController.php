@@ -69,28 +69,34 @@ class TouristPlaceController extends Controller
         }
 
         if ($request->filled('sort_by')) {
-        $sortField = $request->sort_by;
-        $sortOrder = $request->get('sort_order', 'asc');
+            $sortField = $request->sort_by;
+            $sortOrder = $request->get('sort_order', 'asc');
 
-        if (in_array($sortField, ['name', 'rating', 'likes_count'])) {
-            if ($sortField === 'rating') {
-                $queryBuilder->orderByRaw("rating IS NULL")
-                    ->orderBy('rating', $sortOrder);
-            } else {
-                $queryBuilder->orderBy($sortField, $sortOrder);
+            if (in_array($sortField, ['name', 'rating', 'likes_count'])) {
+                if ($sortField === 'rating') {
+                    $queryBuilder->orderByRaw("rating IS NULL")
+                        ->orderBy('rating', $sortOrder);
+                } else {
+                    $queryBuilder->orderBy($sortField, $sortOrder);
+                }
             }
+        } else {
+            $queryBuilder->orderByRaw("quality_score IS NULL")
+                ->orderBy('quality_score', 'desc')
+                ->orderBy('rating_weighted', 'desc')
+                ->orderBy('review_count', 'desc');
         }
-    } else {
-        $queryBuilder->orderByRaw("quality_score IS NULL")
-            ->orderBy('quality_score', 'desc')
-            ->orderBy('rating_weighted', 'desc')
-            ->orderBy('review_count', 'desc'); 
-    }
 
 
         return $queryBuilder->limit(12)->get();
     }
 
+    public function ShowAll(Request $request)
+    {
+        return TouristPlace::with(['categories', 'reviews', 'photos'])
+            ->withCount('likes')
+            ->get();
+    }
 
     public function show($id)
     {

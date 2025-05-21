@@ -1,0 +1,23 @@
+<section class="max-w-10xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+    <div>
+        <app-admin-dashboard></app-admin-dashboard>
+    </div>
+
+    <div class="flex flex-wrap gap-4 justify-center sm:justify-start">
+        <button (click)="setActive('users')"
+            [ngClass]="{'bg-orange-600 text-white': activeComponent === 'users', 'bg-white text-gray-800': activeComponent !== 'users'}"
+            class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
+            Users
+        </button>
+        <button (click)="setActive('places')"
+            [ngClass]="{'bg-orange-600 text-white': activeComponent === 'places', 'bg-white text-gray-800': activeComponent !== 'places'}"
+            class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
+            Places
+        </button>
+    </div>
+
+    <div class="mt-4">
+        <app-users-table *ngIf="activeComponent === 'users'"></app-users-table>
+        <app-tourist-places-table *ngIf="activeComponent === 'places'"></app-tourist-places-table>
+    </div>
+</section>

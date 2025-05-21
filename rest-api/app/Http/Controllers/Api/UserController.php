@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Review;
+use App\Models\TouristPlace;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -43,20 +45,6 @@ class UserController extends Controller
         ]);
 
         try {
-            // if ($request->hasFile('avatar')) {
-            //     if ($user->avatar) {
-            //         Storage::delete('public/avatars/' . $user->avatar);
-            //     }
-
-            //     $avatarName = $user->id . '_' . time() . '.' . $request->avatar->extension();
-            //     $avatarPath = $request->file('avatar')->storeAs(
-            //         'avatars',
-            //         $avatarName,
-            //         'public'
-            //     );
-            //     $dataToUpdate['avatar'] = $avatarName;
-            // }
-
             if (isset($validatedData['interests'])) {
                 $interests = explode(',', $validatedData['interests']);
                 $interests = array_map('trim', $interests);
@@ -86,7 +74,7 @@ class UserController extends Controller
     public function index()
     {
         $this->authorizeAdmin();
-        $users = User::with(['reviews', 'comments'])->paginate(10);
+        $users = User::with(['reviews', 'comments'])->get();
 
         return UserResource::collection($users);
     }
@@ -142,6 +130,17 @@ class UserController extends Controller
             ->paginate(10);
 
         return UserResource::collection($users);
+    }
+
+    public function stats(Request $request)
+    {
+        $this->authorizeAdmin();
+
+        return response()->json([
+            'users_count' => User::count(),
+            'places_count' => TouristPlace::count(),
+            'reviews_count' => Review::count(),
+        ]);
     }
 
 
