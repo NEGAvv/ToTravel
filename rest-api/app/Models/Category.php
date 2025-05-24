@@ -8,31 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
+    /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name',
+        'name'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function places()
     {
-        return [
-            'id' => 'integer',
-        ];
-    }
-
-    public function touristPlaces(): BelongsToMany
-    {
-        return $this->belongsToMany(TouristPlace::class);
+        return $this->belongsToMany(TouristPlace::class, 'category_tourist_place', 'category_id', 'place_id');
     }
 }

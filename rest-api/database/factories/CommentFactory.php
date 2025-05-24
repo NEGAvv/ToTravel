@@ -11,21 +11,16 @@ use App\Models\User;
 class CommentFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Comment::class;
-
-    /**
      * Define the model's default state.
+     *
+     * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
-            'review_id' => Review::factory(),
-            'user_id' => User::factory(),
-            'comment_text' => fake()->text(),
+            'user_id' => null,
+            'review_id' => null,
+            'comment_text' => $this->faker->realTextBetween(40, 100),
         ];
     }
 }

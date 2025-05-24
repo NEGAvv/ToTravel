@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         //     'interests' => json_encode(['керування', 'моніторинг', 'безпека']),
         // ]);
 
-        User::factory(10)->create();
+        //User::factory(10)->create();
 
         // Категорії і туристичні місця
         // Category::factory(5)->create();
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         // $places = TouristPlace::all();
 
         // if ($users->count() && $places->count()) {
-        //     Review::factory(50)->make()->each(function ($review) use ($users, $places) {
+        //     Review::factory(500)->make()->each(function ($review) use ($users, $places) {
         //         $review->user_id = $users->random()->id;
         //         $review->place_id = $places->random()->id;
         //         $review->save();
@@ -62,13 +62,13 @@ class DatabaseSeeder extends Seeder
         // $reviews = Review::all();
 
         // if ($users->count() && $reviews->count()) {
-        //     Comment::factory(100)->make()->each(function ($comment) use ($users, $reviews) {
+        //     Comment::factory(500)->make()->each(function ($comment) use ($users, $reviews) {
         //         $comment->user_id = $users->random()->id;
         //         $comment->review_id = $reviews->random()->id;
         //         $comment->save();
         //     });
 
-        //     Like::factory(200)->make()->each(function ($like) use ($users, $places, $reviews) {
+        //     Like::factory(500)->make()->each(function ($like) use ($users, $places, $reviews) {
         //         do {
         //             $like->user_id = $users->random()->id;
 

@@ -9,58 +9,52 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Review extends Model
 {
+    /** @use HasFactory<\Database\Factories\ReviewFactory> */
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'place_id',
         'user_id',
         'rating',
-        'review_text',
-        'tourist_place_id',
+        'review_text'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function place()
     {
-        return [
-            'id' => 'integer',
-            'place_id' => 'integer',
-            'user_id' => 'integer',
-            'tourist_place_id' => 'integer',
-        ];
+        return $this->belongsTo(TouristPlace::class, 'place_id');
     }
 
-    public function touristPlace(): BelongsTo
-    {
-        return $this->belongsTo(TouristPlace::class);
-    }
-
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function place(): BelongsTo
+    public function comments()
     {
-        return $this->belongsTo(\App\Models\TouristPlace::class);
+        return $this->hasMany(Comment::class, 'review_id');
     }
 
-    public function comments(): HasMany
+    public function likes()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Like::class, 'review_id');
     }
 
-    public function likes(): HasMany
+    protected static function booted()
     {
-        return $this->hasMany(Like::class);
+        static::created(function ($review) {
+            $review->place->updateRating();
+            
+            cache()->forget('global_average_rating');
+        });
+
+        static::updated(function ($review) {
+            $review->place->updateRating();
+            cache()->forget('global_average_rating');
+        });
+
+        static::deleted(function ($review) {
+            $review->place->updateRating();
+            cache()->forget('global_average_rating');
+        });
     }
 }

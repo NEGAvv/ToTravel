@@ -9,30 +9,17 @@ use App\Models\TouristPlace;
 class TouristPlaceFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = TouristPlace::class;
-
-    /**
      * Define the model's default state.
+     *
+     * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
-            'location_id' => fake()->numberBetween(-10000, 10000),
-            'name' => fake()->name(),
-            'description' => fake()->text(),
-            'country' => fake()->country(),
-            'address_string' => fake()->word(),
-            'latitude' => fake()->latitude(),
-            'longitude' => fake()->longitude(),
-            'rating' => fake()->randomFloat(0, 0, 9999999999.),
-            'rating_weighted' => fake()->randomFloat(0, 0, 9999999999.),
-            'quality_score' => fake()->randomFloat(0, 0, 9999999999.),
-            'review_count' => fake()->numberBetween(-10000, 10000),
-            'category' => fake()->word(),
+            'name' => $this->faker->companySuffix() . ' ' . $this->faker->citySuffix(),
+            'location' => $this->faker->city() . ', ' . $this->faker->country(),
+            'description' => $this->faker->realTextBetween(100, 180),
+            'rating' => $this->faker->randomFloat(1, 3.5, 5.0),
         ];
     }
 }

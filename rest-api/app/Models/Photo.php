@@ -8,13 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Photo extends Model
 {
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'tourist_place_id',
         'caption',
@@ -27,20 +20,7 @@ class Photo extends Model
         'original_url',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'tourist_place_id' => 'integer',
-        ];
-    }
-
-    public function touristPlace(): BelongsTo
+    public function touristPlace()
     {
         return $this->belongsTo(TouristPlace::class);
     }

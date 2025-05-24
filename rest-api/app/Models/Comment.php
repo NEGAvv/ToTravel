@@ -8,39 +8,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends Model
 {
+    /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'review_id',
-        'user_id',
-        'comment_text',
+        'review_id', 
+        'user_id', 
+        'comment_text', 
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'review_id' => 'integer',
-            'user_id' => 'integer',
-        ];
-    }
-
-    public function review(): BelongsTo
+    public function review()
     {
         return $this->belongsTo(Review::class);
     }
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
