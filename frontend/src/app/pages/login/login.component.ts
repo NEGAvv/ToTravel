@@ -27,9 +27,9 @@ export class LoginComponent {
       {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(8)]],
-        password_confirmation: ['', Validators.required],
+        //password_confirmation: ['', Validators.required],
       },
-      { validators: [this.passwordMatchValidator] }
+     // { validators: [this.passwordMatchValidator] }
     );
   }
 
@@ -37,15 +37,15 @@ export class LoginComponent {
     this.hidePassword = !this.hidePassword;
   }
 
-  toggleConfirmPasswordVisibility() {
-    this.hideConfirmPassword = !this.hideConfirmPassword;
-  }
+  // toggleConfirmPasswordVisibility() {
+  //   this.hideConfirmPassword = !this.hideConfirmPassword;
+  // }
 
-  passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
-    const password = group.get('password')?.value;
-    const confirm = group.get('password_confirmation')?.value;
-    return password === confirm ? null : { passwordMismatch: true };
-  }
+  // passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+  //   const password = group.get('password')?.value;
+  //   const confirm = group.get('password_confirmation')?.value;
+  //   return password === confirm ? null : { passwordMismatch: true };
+  // }
 
   onSubmit() {
     if (this.loginForm.invalid) return;

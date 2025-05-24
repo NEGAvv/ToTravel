@@ -71,7 +71,6 @@ class UserController extends Controller
         try {
             if ($user->avatar) {
                 Storage::disk('public')->delete('avatars/' . $user->avatar);
-
             }
 
             $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->extension();
@@ -106,7 +105,7 @@ class UserController extends Controller
     }
 
 
-    // Show 10 users for admin
+    // Show users for admin
     public function index()
     {
         $this->authorizeAdmin();
@@ -114,6 +113,7 @@ class UserController extends Controller
 
         return UserResource::collection($users);
     }
+
     //Update as admin
     public function adminUpdate(Request $request, $id)
     {
@@ -125,11 +125,15 @@ class UserController extends Controller
             'name' => 'sometimes|string|max:255',
             'bio' => 'nullable|string',
             'location' => 'nullable|string|max:255',
-            'interests' => 'nullable|array',
+            'interests' => 'nullable|string',
             'interests.*' => 'string',
-            'role' => ['sometimes', Rule::in(['USER', 'ADMIN'])], // allow to change the role
+            'role' => ['sometimes', Rule::in(['USER', 'ADMIN'])],
         ]);
-
+        if (isset($validatedData['interests'])) {
+            $interests = explode(',', $validatedData['interests']);
+            $interests = array_map('trim', $interests);
+            $validatedData['interests'] = array_filter($interests) ?: null;
+        }
 
         $user->update($dataToUpdate);
 
@@ -152,6 +156,13 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted']);
     }
+
+    public function showUser($id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json(['data' => $user]);
+    }
+
 
     public function search(Request $request)
     {

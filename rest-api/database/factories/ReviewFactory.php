@@ -3,24 +3,32 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use App\Models\Place;
+use App\Models\Review;
+use App\Models\TouristPlace;
+use App\Models\User;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Review>
- */
 class ReviewFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * The name of the factory's corresponding model.
      *
-     * @return array<string, mixed>
+     * @var string
+     */
+    protected $model = Review::class;
+
+    /**
+     * Define the model's default state.
      */
     public function definition(): array
     {
         return [
-            'user_id' => null,
-            'place_id' => null,
-            'rating' => $this->faker->numberBetween(3, 5),
-            'review_text' => $this->faker->realTextBetween(80, 160),
+            'place_id' => Place::factory(),
+            'user_id' => User::factory(),
+            'rating' => fake()->numberBetween(-10000, 10000),
+            'review_text' => fake()->text(),
+            'tourist_place_id' => TouristPlace::factory(),
         ];
     }
 }

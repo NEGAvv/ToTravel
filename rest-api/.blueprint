@@ -1,0 +1,35 @@
+created:
+    - database/factories/UserFactory.php
+    - database/factories/TouristPlaceFactory.php
+    - database/factories/ReviewFactory.php
+    - database/factories/CommentFactory.php
+    - database/factories/LikeFactory.php
+    - database/factories/CategoryFactory.php
+    - database/factories/PhotoFactory.php
+    - database/factories/UserPreferenceFactory.php
+    - database/migrations/2025_05_22_115734_create_users_table.php
+    - database/migrations/2025_05_22_115735_create_tourist_places_table.php
+    - database/migrations/2025_05_22_115736_create_reviews_table.php
+    - database/migrations/2025_05_22_115737_create_comments_table.php
+    - database/migrations/2025_05_22_115738_create_likes_table.php
+    - database/migrations/2025_05_22_115739_create_categories_table.php
+    - database/migrations/2025_05_22_115740_create_photos_table.php
+    - database/migrations/2025_05_22_115741_create_user_preferences_table.php
+    - database/migrations/2025_05_22_115742_create_category_tourist_place_table.php
+    - app/Models/User.php
+    - app/Models/TouristPlace.php
+    - app/Models/Review.php
+    - app/Models/Comment.php
+    - app/Models/Like.php
+    - app/Models/Category.php
+    - app/Models/Photo.php
+    - app/Models/UserPreference.php
+models:
+    User: { name: string, email: 'string unique', password: string, role: 'string default:USER', bio: 'text nullable', location: 'string nullable', interests: 'json nullable', avatar: 'string nullable', email_verified_at: 'timestamp nullable', remember_token: 'string nullable', relationships: { hasMany: 'Review, Comment, Like', hasOne: UserPreference } }
+    TouristPlace: { location_id: integer, name: string, description: text, country: string, address_string: string, latitude: double, longitude: double, rating: 'float default:0', rating_weighted: 'float default:0', quality_score: 'float default:0', review_count: 'integer default:0', category: 'string nullable', relationships: { hasMany: 'Review, Like, Photo', belongsToMany: Category } }
+    Review: { place_id: 'id foreign', user_id: 'id foreign', rating: integer, review_text: text, relationships: { belongsTo: 'TouristPlace, User', hasMany: 'Comment, Like' } }
+    Comment: { review_id: 'id foreign', user_id: 'id foreign', comment_text: text, relationships: { belongsTo: 'Review, User' } }
+    Like: { place_id: 'id foreign nullable', review_id: 'id foreign nullable', user_id: 'id foreign', relationships: { belongsTo: 'TouristPlace, Review, User' } }
+    Category: { name: string, relationships: { belongsToMany: TouristPlace } }
+    Photo: { tourist_place_id: 'id foreign', caption: 'string nullable', source: 'string nullable', user: 'string nullable', thumbnail_url: 'string nullable', small_url: 'string nullable', medium_url: 'string nullable', large_url: 'string nullable', original_url: 'string nullable', relationships: { belongsTo: TouristPlace } }
+    UserPreference: { user_id: 'id foreign', rating: integer, category: string, country: string, relationships: { belongsTo: User } }

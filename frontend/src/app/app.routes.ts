@@ -28,6 +28,8 @@ export const routes: Routes = [
       { path: 'saved-places', component: SavedPlacesComponent },
       { path: 'survey', component: SurveyComponent },
       { path: 'admin', component: AdminPanelComponent },
+      { path: 'admin/users/edit/:id', component: EditComponent}
+
     ],
     canActivate: [authGuard] 
   },

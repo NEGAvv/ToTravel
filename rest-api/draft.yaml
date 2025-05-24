@@ -1,0 +1,118 @@
+models:
+  User:
+    name: string
+    email: string unique
+    password: string
+    role: string default:USER
+    bio: text nullable
+    location: string nullable
+    interests: json nullable
+    avatar: string nullable
+    email_verified_at: timestamp nullable
+    remember_token: string nullable
+    relationships:
+      hasMany: Review, Comment, Like
+      hasOne: UserPreference
+
+  TouristPlace:
+    location_id: integer
+    name: string
+    description: text
+    country: string
+    address_string: string
+    latitude: double
+    longitude: double
+    rating: float default:0
+    rating_weighted: float default:0
+    quality_score: float default:0
+    review_count: integer default:0
+    category: string nullable
+    relationships:
+      hasMany: Review, Like, Photo
+      belongsToMany: Category
+
+  Review:
+    place_id: id foreign
+    user_id: id foreign
+    rating: integer
+    review_text: text
+    relationships:
+      belongsTo: TouristPlace, User
+      hasMany: Comment, Like
+
+  Comment:
+    review_id: id foreign
+    user_id: id foreign
+    comment_text: text
+    relationships:
+      belongsTo: Review, User
+
+  Like:
+    place_id: id foreign nullable
+    review_id: id foreign nullable
+    user_id: id foreign
+    relationships:
+      belongsTo: TouristPlace, Review, User
+
+  Category:
+    name: string
+    relationships:
+      belongsToMany: TouristPlace
+
+  Photo:
+    tourist_place_id: id foreign
+    caption: string nullable
+    source: string nullable
+    user: string nullable
+    thumbnail_url: string nullable
+    small_url: string nullable
+    medium_url: string nullable
+    large_url: string nullable
+    original_url: string nullable
+    relationships:
+      belongsTo: TouristPlace
+
+  UserPreference:
+    user_id: id foreign
+    rating: integer
+    category: string
+    country: string
+    relationships:
+      belongsTo: User
+
+controllers:
+  User: index
+    show
+    store
+    update
+    destroy
+
+  TouristPlace: index
+    show
+    store
+    update
+    destroy
+
+  Review: index
+    show
+    store
+    update
+    destroy
+
+  Comment: index
+    show
+    store
+    update
+    destroy
+
+  Like: index
+    store
+    destroy
+
+  Category: index
+    store
+    destroy
+
+  UserPreference: store
+    show
+    recommendations

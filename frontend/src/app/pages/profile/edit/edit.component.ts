@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit',
@@ -27,25 +28,61 @@ user: any = {
   editInterests = false;
   formattedDate = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.loadProfile();
+  const id = this.route.snapshot.paramMap.get('id');
+
+  if (id) {
+    this.loadUserById(id);
+  } else {
+    this.loadProfile(); 
   }
+  
+}
+
+loadUserById(id: string) {
+  this.http.get(`http://localhost:8000/api/admin/users/${id}`).subscribe({
+    next: (res: any) => {
+      this.user = {...res.data};
+      if (typeof this.user.interests === 'string') {
+        this.user.interests = this.user.interests
+          .split(',')
+          .map((item: string) => item.trim())
+          .filter((item: string) => item.length > 0);
+      }
+      this.originalUser = {...res.data};
+      this.interestsInput = this.user.interests?.join(', ') || '';
+      this.formatDate();
+    },
+    error: (err) => {
+      console.error('Помилка завантаження користувача', err);
+    }
+  });
+}
 
   loadProfile() {
-    this.http.get('http://localhost:8000/api/profile').subscribe({
-      next: (res: any) => {
-        this.user = {...res.data};
-        this.originalUser = {...res.data};
-        this.interestsInput = this.user.interests?.join(', ') || '';
-        this.formatDate();
-      },
-      error: (err) => {
-        console.error('Помилка завантаження профілю', err);
+  this.http.get('http://localhost:8000/api/profile').subscribe({
+    next: (res: any) => {
+      this.user = { ...res.data };
+
+      if (typeof this.user.interests === 'string') {
+        this.user.interests = this.user.interests
+          .split(',')
+          .map((item: string) => item.trim())
+          .filter((item: string) => item.length > 0);
       }
-    });
-  }
+
+      this.originalUser = { ...this.user };
+      this.interestsInput = this.user.interests?.join(', ') || '';
+      this.formatDate();
+    },
+    error: (err) => {
+      console.error('Помилка завантаження профілю', err);
+    }
+  });
+}
+
 
   formatDate() {
     if (this.user.created_at) {
@@ -93,26 +130,33 @@ onInterestsChange(value: string) {
   }
 
   updateProfile() {
-    const payload = {
-      name: this.user.name,
-      bio: this.user.bio,
-      location: this.user.location,
-      interests: this.interestsInput
-    };
+  const payload = {
+    name: this.user.name,
+    bio: this.user.bio,
+    location: this.user.location,
+    interests: this.interestsInput
+  };
 
-    this.http.put('http://localhost:8000/api/profile', payload).subscribe({
-      next: (res: any) => {
-        this.user = res.data;
-        this.originalUser = {...res.data};
-        this.interestsInput = this.user.interests?.join(', ') || '';
-         this.router.navigate(['/profile']);
-      },
-      error: (err) => {
-        console.error('Помилка оновлення профілю', err);
-        alert('Сталася помилка при оновленні профілю');
-      }
-    });
-  }
+  const id = this.route.snapshot.paramMap.get('id');
+  const url = id 
+    ? `http://localhost:8000/api/admin/users/${id}` 
+    : `http://localhost:8000/api/profile`;         
+
+  this.http.put(url, payload).subscribe({
+    next: (res: any) => {
+      this.user = res.data;
+      this.originalUser = {...res.data};
+      this.interestsInput = this.user.interests?.join(', ') || '';
+      const redirect = id ? '/admin' : '/profile';
+      this.router.navigate([redirect]);
+    },
+    error: (err) => {
+      console.error('Помилка оновлення профілю', err);
+      alert('Сталася помилка при оновленні профілю');
+    }
+  });
+}
+
 
   cancelEdit() {
     this.user = {...this.originalUser};

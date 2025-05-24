@@ -76,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/users/{id}', [UserController::class, 'adminUpdate']);
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
     Route::get('/admin/stats', [UserController::class, 'stats']);
+    Route::get('/admin/users/{id}', [UserController::class, 'showUser']);
 
     // Admin review management
     Route::delete('/admin/reviews/{review}', [ReviewController::class, 'adminDestroy']);

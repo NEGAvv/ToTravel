@@ -3,24 +3,36 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use App\Models\TouristPlace;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TouristPlace>
- */
 class TouristPlaceFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * The name of the factory's corresponding model.
      *
-     * @return array<string, mixed>
+     * @var string
+     */
+    protected $model = TouristPlace::class;
+
+    /**
+     * Define the model's default state.
      */
     public function definition(): array
     {
         return [
-            'name' => $this->faker->companySuffix() . ' ' . $this->faker->citySuffix(),
-            'location' => $this->faker->city() . ', ' . $this->faker->country(),
-            'description' => $this->faker->realTextBetween(100, 180),
-            'rating' => $this->faker->randomFloat(1, 3.5, 5.0),
+            'location_id' => fake()->numberBetween(-10000, 10000),
+            'name' => fake()->name(),
+            'description' => fake()->text(),
+            'country' => fake()->country(),
+            'address_string' => fake()->word(),
+            'latitude' => fake()->latitude(),
+            'longitude' => fake()->longitude(),
+            'rating' => fake()->randomFloat(0, 0, 9999999999.),
+            'rating_weighted' => fake()->randomFloat(0, 0, 9999999999.),
+            'quality_score' => fake()->randomFloat(0, 0, 9999999999.),
+            'review_count' => fake()->numberBetween(-10000, 10000),
+            'category' => fake()->word(),
         ];
     }
 }

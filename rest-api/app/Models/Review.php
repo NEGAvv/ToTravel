@@ -4,56 +4,63 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Review extends Model
 {
-    /** @use HasFactory<\Database\Factories\ReviewFactory> */
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'place_id',
         'user_id',
         'rating',
-        'review_text'
+        'review_text',
+        'tourist_place_id',
     ];
 
-    public function place()
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        return $this->belongsTo(TouristPlace::class, 'place_id');
+        return [
+            'id' => 'integer',
+            'place_id' => 'integer',
+            'user_id' => 'integer',
+            'tourist_place_id' => 'integer',
+        ];
     }
 
-    public function user()
+    public function touristPlace(): BelongsTo
+    {
+        return $this->belongsTo(TouristPlace::class);
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    public function place(): BelongsTo
     {
-        return $this->hasMany(Comment::class, 'review_id');
+        return $this->belongsTo(\App\Models\TouristPlace::class);
     }
 
-    public function likes()
+    public function comments(): HasMany
     {
-        return $this->hasMany(Like::class, 'review_id');
+        return $this->hasMany(Comment::class);
     }
 
-    protected static function booted()
+    public function likes(): HasMany
     {
-        static::created(function ($review) {
-            $review->place->updateRating();
-            
-            cache()->forget('global_average_rating');
-        });
-
-        static::updated(function ($review) {
-            $review->place->updateRating();
-            cache()->forget('global_average_rating');
-        });
-
-        static::deleted(function ($review) {
-            $review->place->updateRating();
-            cache()->forget('global_average_rating');
-        });
+        return $this->hasMany(Like::class);
     }
 }

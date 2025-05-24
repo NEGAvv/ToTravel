@@ -4,20 +4,17 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Like;
-use App\Models\Place;
-use App\Models\Review;
+use App\Models\Photo;
 use App\Models\TouristPlace;
-use App\Models\User;
 
-class LikeFactory extends Factory
+class PhotoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Like::class;
+    protected $model = Photo::class;
 
     /**
      * Define the model's default state.
@@ -25,10 +22,15 @@ class LikeFactory extends Factory
     public function definition(): array
     {
         return [
-            'place_id' => Place::factory(),
-            'review_id' => Review::factory(),
-            'user_id' => User::factory(),
             'tourist_place_id' => TouristPlace::factory(),
+            'caption' => fake()->word(),
+            'source' => fake()->word(),
+            'user' => fake()->word(),
+            'thumbnail_url' => fake()->word(),
+            'small_url' => fake()->word(),
+            'medium_url' => fake()->word(),
+            'large_url' => fake()->word(),
+            'original_url' => fake()->word(),
         ];
     }
 }

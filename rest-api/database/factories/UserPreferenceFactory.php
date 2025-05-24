@@ -4,20 +4,17 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Like;
-use App\Models\Place;
-use App\Models\Review;
-use App\Models\TouristPlace;
 use App\Models\User;
+use App\Models\UserPreference;
 
-class LikeFactory extends Factory
+class UserPreferenceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Like::class;
+    protected $model = UserPreference::class;
 
     /**
      * Define the model's default state.
@@ -25,10 +22,10 @@ class LikeFactory extends Factory
     public function definition(): array
     {
         return [
-            'place_id' => Place::factory(),
-            'review_id' => Review::factory(),
             'user_id' => User::factory(),
-            'tourist_place_id' => TouristPlace::factory(),
+            'rating' => fake()->numberBetween(-10000, 10000),
+            'category' => fake()->word(),
+            'country' => fake()->country(),
         ];
     }
 }

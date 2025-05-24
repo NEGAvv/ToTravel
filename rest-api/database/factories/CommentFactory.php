@@ -3,23 +3,29 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use App\Models\Comment;
+use App\Models\Review;
+use App\Models\User;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
- */
 class CommentFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * The name of the factory's corresponding model.
      *
-     * @return array<string, mixed>
+     * @var string
+     */
+    protected $model = Comment::class;
+
+    /**
+     * Define the model's default state.
      */
     public function definition(): array
     {
         return [
-            'user_id' => null,
-            'review_id' => null,
-            'comment_text' => $this->faker->realTextBetween(40, 100),
+            'review_id' => Review::factory(),
+            'user_id' => User::factory(),
+            'comment_text' => fake()->text(),
         ];
     }
 }

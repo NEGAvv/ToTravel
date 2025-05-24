@@ -1,14 +1,13 @@
 <header class="bg-white border-b shadow-sm sticky top-0 z-50">
   <nav class="max-w-7xl mx-auto px-4 py-3 w-full">
 
-    <!-- Top row: Logo & burger -->
-    <div class="flex items-center justify-between w-full">
+    <div class="flex items-center justify-between w-full md:hidden">
       <a routerLink="/"
         class="font-bold text-2xl sm:text-3xl no-underline px-2 py-1 border-2 border-[#BF4408] hover:scale-105 hover:shadow-md transition-all duration-300 rounded">
         ToTravel
       </a>
-      <!-- Burger button for mobile -->
-      <button class="md:hidden text-[#BF4408]" (click)="toggleMobileMenu()">
+
+      <button class="text-[#BF4408]" (click)="toggleMobileMenu()">
         <svg *ngIf="!isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
@@ -18,12 +17,87 @@
       </button>
     </div>
 
+    <div class="hidden md:flex md:items-center md:justify-between md:gap-6 mt-4 md:mt-0 w-full">
+      <a routerLink="/"
+        class="font-bold text-2xl no-underline px-2 py-1 border-2 border-[#BF4408] hover:scale-105 hover:shadow-md transition-all duration-300 rounded">
+        ToTravel
+      </a>
+
+      <div class="flex items-center justify-between gap-6 w-full">
+        <ul class="flex flex-row gap-4 text-base font-medium text-gray-700">
+          <li><a routerLink="/" class="hover:text-[#BF4408]">Home</a></li>
+          <li><a routerLink="/places" class="hover:text-[#BF4408]">Tourist Places</a></li>
+          <li>
+            <a routerLink="/saved-places" class="flex items-center gap-2 hover:text-amber-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+              Saved Places
+            </a>
+          </li>
+        </ul>
+
+        <div class="flex items-center gap-4"> 
+          <form class="w-52 lg:w-64 xl:w-72 2xl:w-80" (ngSubmit)="onSearch()">
+            <div
+              class="flex rounded-xl overflow-hidden border-2 border-[#BF4408] focus-within:ring-1 focus-within:ring-[#BF4408]">
+              <div class="relative flex-grow">
+                <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-black opacity-70" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                  </svg>
+                </div>
+                <input type="search" id="default-search" [(ngModel)]="searchQuery" name="searchQuery"
+                  placeholder="Search places..."
+                  class="block w-full p-2 ps-10 text-black/70 text-sm bg-white focus:outline-none">
+              </div>
+              <button type="submit"
+                class="px-3 text-sm font-semibold text-white bg-[#BF4408] hover:bg-[#e04e0e] transition-colors">
+                Search
+              </button>
+            </div>
+          </form>
+
+          <div class="relative text-left">
+            <button (click)="toggleDropdown()"
+              class="flex items-center text-sm font-semibold text-gray-800 hover:text-[#BF4408] transition-colors">
+              <img class="w-8 h-8 me-2 rounded-full border-2 border-[#BF4408]"
+                [src]="userData?.avatar_url || defaultAvatar">
+              {{ userData?.name || 'Guest' }}
+              <svg class="w-2.5 h-2.5 ms-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m1 1 4 4 4-4" />
+              </svg>
+            </button>
+            <div *ngIf="isDropdownOpen"
+              class="absolute right-0 z-10 mt-3 w-52 bg-white border-2 border-[#BF4408] rounded-xl shadow-md text-sm text-gray-800">
+              <div class="px-4 py-3 border-b border-[#BF4408]/30">
+                <div class="font-bold">{{ userData?.name }}</div>
+                <div class="truncate text-gray-600 text-xs">{{ userData?.email }}</div>
+              </div>
+              <ul class="py-2">
+                <li><a routerLink="/profile" class="block px-4 py-2 hover:bg-[#BF4408]/10">Profile</a></li>
+              </ul>
+              <div class="py-2 border-t border-[#BF4408]/30">
+                <button (click)="onLogout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Sign
+                  out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- Full menu (collapsible on mobile) -->
     <div [ngClass]="{
-  'flex flex-col gap-4 mt-4': isMobileMenuOpen,
-  'hidden': !isMobileMenuOpen,
-  'md:flex md:flex-row md:items-center md:justify-between md:gap-6 md:mt-0': true
-}" class="w-full transition-all duration-300">
+    'flex flex-col gap-4 mt-4': isMobileMenuOpen,
+    'hidden': !isMobileMenuOpen,
+    'md:hidden': true
+  }" class="w-full transition-all duration-300">
 
 
       <!-- Navigation links -->
