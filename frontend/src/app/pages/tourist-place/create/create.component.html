@@ -1,0 +1,104 @@
+<div class="flex justify-center px-4 py-10 mt-4">
+  <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-5xl">
+    <h2 class="text-2xl font-bold text-center text-[#BF4408] mb-6">Add Tourist Place</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Left: Photo Upload -->
+      <div class="col-span-1 flex flex-col items-center">
+        <div class="w-full flex flex-col items-center">
+          <div class="relative w-48 h-48 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border">
+            <img
+              src="https://media-cdn.tripadvisor.com/media/photo-c/2560x500/09/a4/78/95/fischerkirche.jpg"
+              alt="Place photo"
+              class="w-full h-full object-cover" />
+          </div>
+
+          <input #photoInput type="file" accept="image/*" hidden  />
+
+          <button type="button" 
+            class="mt-4 bg-white text-[#BF4408] border border-[#BF4408] px-4 py-1.5 text-sm rounded-full shadow hover:bg-[#BF4408] hover:text-white transition-all duration-200 cursor-pointer"
+            title="Upload new place photo">
+            Upload Photo
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Form Fields -->
+      <div class="col-span-1 md:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <!-- Name -->
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-600 mb-1">Name</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="Enter place name" />
+          </div>
+
+          <!-- Description -->
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-600 mb-1">Description</label>
+            <textarea rows="4"
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400 resize-none"
+              placeholder="Describe the place..."></textarea>
+          </div>
+
+          <!-- Country -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Country</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="Country" />
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="Address string" />
+          </div>
+
+          <!-- Coordinates -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Latitude</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="e.g. 50.4501" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Longitude</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="e.g. 30.5234" />
+          </div>
+
+          <!-- Categories -->
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-600 mb-1">Categories (comma-separated)</label>
+            <input
+              class="w-full border border-gray-300 focus:border-[#BF4408] focus:ring-1 focus:ring-[#BF4408] outline-none py-2 px-3 rounded-xl bg-white shadow-sm placeholder:text-gray-400"
+              placeholder="e.g. Historical, Nature, Adventure" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row gap-3 mt-6 justify-end">
+      <button
+        class="w-full sm:w-auto py-2 px-6 rounded-full font-bold text-sm transition-all duration-300 shadow-md border-2
+        bg-white text-[#BF4408] border-[#BF4408] hover:bg-[#BF4408] hover:text-white cursor-pointer">
+        Add Place
+      </button>
+      <button
+        class="w-full sm:w-auto py-2 px-6 rounded-full font-bold text-sm transition-all duration-300 shadow-md border-2
+        bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 cursor-pointer">
+        Cancel
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -12,6 +12,7 @@ import { SavedPlacesComponent } from './pages/saved-places/saved-places.componen
 import { SearchPlacesComponent } from './pages/search-places/search-places.component';
 import { SurveyComponent } from './pages/survey/survey.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { CreateComponent } from './pages/tourist-place/create/create.component';
 
 
 export const routes: Routes = [
@@ -28,8 +29,8 @@ export const routes: Routes = [
       { path: 'saved-places', component: SavedPlacesComponent },
       { path: 'survey', component: SurveyComponent },
       { path: 'admin', component: AdminPanelComponent },
-      { path: 'admin/users/edit/:id', component: EditComponent}
-
+      { path: 'admin/users/edit/:id', component: EditComponent},
+      { path: 'create', component: CreateComponent}
     ],
     canActivate: [authGuard] 
   },

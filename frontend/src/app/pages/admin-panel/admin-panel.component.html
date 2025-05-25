@@ -3,16 +3,22 @@
         <app-admin-dashboard></app-admin-dashboard>
     </div>
 
-    <div class="flex flex-wrap gap-4 justify-center sm:justify-start">
-        <button (click)="setActive('users')"
-            [ngClass]="{'bg-orange-600 text-white': activeComponent === 'users', 'bg-white text-gray-800': activeComponent !== 'users'}"
-            class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
-            Users
-        </button>
-        <button (click)="setActive('places')"
-            [ngClass]="{'bg-orange-600 text-white': activeComponent === 'places', 'bg-white text-gray-800': activeComponent !== 'places'}"
-            class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
-            Places
+    <div class="flex justify-between items-center">
+        <div class="flex flex-wrap gap-4">
+            <button (click)="setActive('users')"
+                [ngClass]="{'bg-orange-600 text-white': activeComponent === 'users', 'bg-white text-gray-800': activeComponent !== 'users'}"
+                class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
+                Users
+            </button>
+            <button (click)="setActive('places')"
+                [ngClass]="{'bg-orange-600 text-white': activeComponent === 'places', 'bg-white text-gray-800': activeComponent !== 'places'}"
+                class="px-5 py-2 rounded-xl shadow hover:bg-orange-700 hover:text-white transition">
+                Places
+            </button>
+        </div>
+        <button *ngIf="activeComponent === 'places'"
+            class="px-5 py-2 rounded-xl shadow bg-green-600 text-white hover:bg-green-700 transition">
+            Add Tourist Place
         </button>
     </div>
 
