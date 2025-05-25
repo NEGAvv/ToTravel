@@ -43,7 +43,6 @@ class Review extends Model
     {
         static::created(function ($review) {
             $review->place->updateRating();
-            
             cache()->forget('global_average_rating');
         });
 

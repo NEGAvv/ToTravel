@@ -26,7 +26,6 @@ class TouristPlace extends Model
         'quality_score',
         'review_count',
         'category',
-
     ];
 
     public function reviews()

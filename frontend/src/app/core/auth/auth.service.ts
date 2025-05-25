@@ -25,7 +25,7 @@ export class AuthService {
 
   public apiUrl  = 'http://127.0.0.1:8000/api'; 
 
-   private _isLoggedIn$!: BehaviorSubject<boolean>;
+  private _isLoggedIn$!: BehaviorSubject<boolean>;
   isLoggedIn$!: Observable<boolean>;
 
   constructor(private http: HttpClient, public token: TokenService) {

@@ -12,13 +12,6 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserPreferenceController;
 
-
-
-Route::get('/test-image', function () {
-    return response()->file(storage_path('app/private/public/avatars/2_avatar_1747833908.jpg'));
-});
-
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
